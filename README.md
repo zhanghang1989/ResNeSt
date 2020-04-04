@@ -247,7 +247,7 @@ Coming Soon.
 
 ## Reference
 
-**ResNeSt: Split-Attention Networks** [[arXiv]]()
+**ResNeSt: Split-Attention Networks** [[arXiv]()]
 
 Hang Zhang, Chongruo Wu, Zhongyue Zhang, Yi Zhu, Zhi Zhang, Haibin Lin, Yue Sun, Tong He, Jonas Muller, R. Manmatha, Mu Li and Alex Smola
 

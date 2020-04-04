@@ -33,7 +33,6 @@ def create_version_file():
         f.write('"""This is resnest version file."""\n')
         f.write("__version__ = '{}'\n".format(version))
 
-# run test scrip after installation
 class install(setuptools.command.install.install):
     def run(self):
         create_version_file()
