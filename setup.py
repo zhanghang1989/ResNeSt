@@ -18,9 +18,10 @@ cwd = os.path.dirname(os.path.abspath(__file__))
 
 version = '0.0.1'
 try:
-    sha = subprocess.check_output(['git', 'rev-parse', 'HEAD'], 
-        cwd=cwd).decode('ascii').strip()
-    version += sha[:7]
+    from datetime import date
+    today = date.today()
+    day = today.strftime("b%d%m%Y")
+    version += day
 except Exception:
     pass
 
