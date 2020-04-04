@@ -20,7 +20,7 @@ version = '0.0.1'
 try:
     sha = subprocess.check_output(['git', 'rev-parse', 'HEAD'], 
         cwd=cwd).decode('ascii').strip()
-    version += '+' + sha[:7]
+    version += sha[:7]
 except Exception:
     pass
 
