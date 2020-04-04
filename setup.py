@@ -43,11 +43,7 @@ class develop(setuptools.command.develop.develop):
         create_version_file()
         setuptools.command.develop.develop.run(self)
 
-try:
-    import pypandoc
-    readme = pypandoc.convert_file('README.md', 'rst')
-except(IOError, ImportError):
-    readme = open('README.md').read()
+readme = open('README.md').read()
 
 requirements = [
     'numpy',
@@ -67,6 +63,7 @@ setup(
     url="https://github.com/zhanghang1989/ResNeSt",
     description="ResNeSt",
     long_description=readme,
+    long_description_content_type='text/markdown',
     license='Apache-2.0',
     install_requires=requirements,
     packages=find_packages(exclude=["scripts", "examples", "tests"]),
