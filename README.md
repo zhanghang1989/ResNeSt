@@ -20,7 +20,7 @@ Split-Attention Network, A New ResNet Variant. It significantly boosts the perfo
 pip install git+https://github.com/zhanghang1989/ResNeSt
 
 # using pypi
-pip install resnest
+pip install resnest --pre
 ```
 
 ## Pretrained Models
