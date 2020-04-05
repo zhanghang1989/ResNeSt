@@ -8,12 +8,9 @@ from torch.nn.modules.utils import _pair
 
 __all__ = ['SKConv2d']
 
-class RFConv2d(object):
+class DropBlock2D(object):
     def __init__(self, *args, **kwargs):
         raise NotImplementedError
-
-class DropBlock2D(RFConv2d):
-    pass
 
 class SplAtConv2d(Module):
     """Split-Attention Conv2d
@@ -33,6 +30,7 @@ class SplAtConv2d(Module):
         self.channels = channels
         self.dropblock_prob = dropblock_prob
         if self.rectify:
+            from rfconv import RFConv2d
             self.conv = RFConv2d(in_channels, channels*radix, kernel_size, stride, padding, dilation,
                                  groups=groups*radix, bias=bias, average_mode=rectify_avg, **kwargs)
         else:

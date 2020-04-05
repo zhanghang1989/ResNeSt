@@ -14,12 +14,9 @@ from .splat import SplAtConv2d
 
 __all__ = ['ResNet', 'Bottleneck']
 
-class RFConv2d(object):
+class DropBlock2D(object):
     def __init__(self, *args, **kwargs):
         raise NotImplementedError
-
-class DropBlock2D(RFConv2d):
-    pass
 
 class GlobalAvgPool2d(nn.Module):
     def __init__(self):
@@ -68,7 +65,12 @@ class Bottleneck(nn.Module):
                 norm_layer=norm_layer,
                 dropblock_prob=dropblock_prob)
         elif rectified_conv:
-            raise NotImplementedError
+            from rfconv import RFConv2d
+            self.conv2 = RFConv2d(
+                planes, planes, kernel_size=3, stride=stride,
+                padding=dilation, dilation=dilation, bias=False,
+                average_mode=rectify_avg)
+            self.bn2 = norm_layer(planes)
         else:
             self.conv2 = nn.Conv2d(
                 planes, planes, kernel_size=3, stride=stride,
@@ -168,7 +170,11 @@ class ResNet(nn.Module):
         super(ResNet, self).__init__()
         self.rectified_conv = rectified_conv
         self.rectify_avg = rectify_avg
-        conv_layer = RFConv2d if rectified_conv else nn.Conv2d
+        if rectified_conv:
+            from rfconv import RFConv2d
+            conv_layer = RFConv2d
+        else:
+            conv_layer = nn.Conv2d
         conv_kwargs = {'average_mode': rectify_avg} if rectified_conv else {}
         if deep_stem:
             self.conv1 = nn.Sequential(

@@ -27,7 +27,7 @@ def short_hash(name):
     return _model_sha256[name][:8]
 
 resnest_model_urls = {name: _url_format.format(name, short_hash(name)) for
-    name in ['resnest50', 'resnest101', 'resnest200', 'resnest269']
+    name in _model_sha256.keys()
 }
 
 def resnest50(pretrained=False, root='~/.encoding/models', **kwargs):
