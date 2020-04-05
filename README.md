@@ -1,6 +1,7 @@
 [![PyPI](https://img.shields.io/pypi/v/resnest.svg)](https://pypi.python.org/pypi/resnest)
 [![PyPI Pre-release](https://img.shields.io/badge/pypi--prerelease-v0.0.2-ff69b4.svg)](https://pypi.org/project/resnest/#history)
 [![Upload Python Package](https://github.com/zhanghang1989/ResNeSt/workflows/Upload%20Python%20Package/badge.svg)](https://github.com/zhanghang1989/ResNeSt/actions)
+[![Downloads](http://pepy.tech/badge/resnest)](http://pepy.tech/project/resnest)
 
 # ResNeSt
 Split-Attention Network, A New ResNet Variant. It significantly boosts the performance of downstream models such as Mask R-CNN, Cascade R-CNN and DeepLabV3.
@@ -44,7 +45,7 @@ pip install resnest --pre
 ```python
 import torch
 # get list of models
-torch.hub.list('zhanghang1989/ResNeSt', force_reload=False)
+torch.hub.list('zhanghang1989/ResNeSt', force_reload=True)
 
 # load pretrained models, using ResNeSt-50 as an example
 net = torch.hub.load('zhanghang1989/ResNeSt', 'resnest50', pretrained=True)
