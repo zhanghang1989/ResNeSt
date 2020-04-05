@@ -65,7 +65,12 @@ class Bottleneck(nn.Module):
                 norm_layer=norm_layer,
                 dropblock_prob=dropblock_prob)
         elif rectified_conv:
-            raise NotImplementedError
+            from rfconv import RFConv2d
+            self.conv2 = RFConv2d(
+                planes, planes, kernel_size=3, stride=stride,
+                padding=dilation, dilation=dilation, bias=False,
+                average_mode=rectify_avg)
+            self.bn2 = norm_layer(planes)
         else:
             self.conv2 = nn.Conv2d(
                 planes, planes, kernel_size=3, stride=stride,
