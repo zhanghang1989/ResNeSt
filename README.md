@@ -95,11 +95,11 @@ Training code and pretrained models are coming soon.
     <td class="tg-0lax">41.2</td>
   </tr>
   <tr>
-    <td class="tg-0lax">ResNeSt-50 (ours)</td>
+    <td class="tg-0lax">ResNeSt-50 (<span style="color:red">ours</span>)</td>
     <td class="tg-0lax"><b>41.4</b></td>
   </tr>
   <tr>
-    <td class="tg-0lax">ResNeSt-101 (ours)</td>
+    <td class="tg-0lax">ResNeSt-101 (<span style="color:red">ours</span>)</td>
     <td class="tg-0lax"><b>43.8</b></td>
   </tr>
   <tr>
@@ -112,11 +112,11 @@ Training code and pretrained models are coming soon.
     <td class="tg-0lax">44.03</td>
   </tr>
   <tr>
-    <td class="tg-0lax">ResNeSt-50 (ours)</td>
+    <td class="tg-0lax">ResNeSt-50 (<span style="color:red">ours</span>)</td>
     <td class="tg-0lax"><b>45.41</b></td>
   </tr>
   <tr>
-    <td class="tg-0lax">ResNeSt-101 (ours)</td>
+    <td class="tg-0lax">ResNeSt-101 (<span style="color:red">ours</span>)</td>
     <td class="tg-0lax"><b>47.5</b></td>
   </tr>
 </table>
@@ -143,12 +143,12 @@ Training code and pretrained models are coming soon.
     <td class="tg-0lax">37.51</td>
   </tr>
   <tr>
-    <td class="tg-0lax">ResNeSt-50 (ours)</td>
+    <td class="tg-0lax">ResNeSt-50 (<span style="color:red">ours</span>)</td>
     <td class="tg-0lax"><b>42.81</b></td>
     <td class="tg-0lax"><b>38.14</td>
   </tr>
   <tr>
-    <td class="tg-0lax">ResNeSt-101 (ours)</td>
+    <td class="tg-0lax">ResNeSt-101 (<span style="color:red">ours</span>)</td>
     <td class="tg-0lax"><b>45.75</b></td>
     <td class="tg-0lax"><b>40.65</b></td>
   </tr>
@@ -164,12 +164,12 @@ Training code and pretrained models are coming soon.
     <td class="tg-0lax">38.52</td>
   </tr>
   <tr>
-    <td class="tg-0lax">ResNeSt-50 (ours)</td>
+    <td class="tg-0lax">ResNeSt-50 (<span style="color:red">ours</span>)</td>
     <td class="tg-0lax"><b>46.19</b></td>
     <td class="tg-0lax"><b>39.55</b></td>
   </tr>
   <tr>
-    <td class="tg-0lax">ResNeSt-101 (ours)</td>
+    <td class="tg-0lax">ResNeSt-101 (<span style="color:red">ours</span>)</td>
     <td class="tg-0lax"><b>48.30</b></td>
     <td class="tg-0lax"><b>41.56</b></td>
   </tr>
@@ -200,12 +200,12 @@ Training code and pretrained models are coming soon.
     <td class="tg-cly1">44.14</b></td>
   </tr>
   <tr>
-    <td class="tg-cly1">ResNeSt-50</td>
+    <td class="tg-cly1">ResNeSt-50 (<span style="color:red">ours</span>)</td>
     <td class="tg-cly1"><b>81.17</b></td>
     <td class="tg-cly1"><b>45.12</b></td>
   </tr>
   <tr>
-    <td class="tg-0lax">ResNeSt-101</td>
+    <td class="tg-0lax">ResNeSt-101 (<span style="color:red">ours</span>)</td>
     <td class="tg-0lax"><b>82.07</td>
     <td class="tg-0lax"><b>46.91</b></td>
   </tr>
@@ -228,7 +228,7 @@ python prepare_imagenet.py --download-dir ./
 ### Torch Model
 
 ```bash
-# use resnest50 as the example
+# use resnest50 as an example
 cd scripts/torch/
 python verify.py --model resnest50 --crop-size 224
 ```
@@ -236,7 +236,7 @@ python verify.py --model resnest50 --crop-size 224
 ### Gluon Model
 
 ```bash
-# use resnest50 as the example
+# use resnest50 as an example
 cd scripts/gluon/
 python verify.py --model resnest50 --crop-size 224
 ```
