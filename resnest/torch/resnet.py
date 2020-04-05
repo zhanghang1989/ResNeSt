@@ -68,14 +68,16 @@ class Bottleneck(nn.Module):
             from rfconv import RFConv2d
             self.conv2 = RFConv2d(
                 group_width, group_width, kernel_size=3, stride=stride,
-                padding=dilation, dilation=dilation, bias=False,
+                padding=dilation, dilation=dilation,
+                groups=cardinality, bias=False,
                 average_mode=rectify_avg)
-            self.bn2 = norm_layer(planes)
+            self.bn2 = norm_layer(group_width)
         else:
             self.conv2 = nn.Conv2d(
                 group_width, group_width, kernel_size=3, stride=stride,
-                padding=dilation, dilation=dilation, bias=False)
-            self.bn2 = norm_layer(planes)
+                padding=dilation, dilation=dilation,
+                groups=cardinality, bias=False)
+            self.bn2 = norm_layer(group_width)
 
         self.conv3 = nn.Conv2d(
             group_width, planes * 4, kernel_size=1, bias=False)
