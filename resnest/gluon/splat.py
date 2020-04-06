@@ -1,3 +1,10 @@
+##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+## Created by: Hang Zhang
+## Email: zhanghang0704@gmail.com
+## Copyright (c) 2020
+##
+## LICENSE file in the root directory of this source tree 
+##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 import mxnet as mx
 from mxnet.gluon import nn
 from mxnet.gluon.nn import Conv2D, Block, HybridBlock, Dense, BatchNorm, Activation
