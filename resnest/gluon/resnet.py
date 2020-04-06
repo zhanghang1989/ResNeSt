@@ -5,7 +5,7 @@
 ##
 ## LICENSE file in the root directory of this source tree 
 ##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-"""ResNetV1bs, implemented in Gluon."""
+"""ResNets, implemented in Gluon."""
 # pylint: disable=arguments-differ,unused-argument,missing-docstring
 from __future__ import division
 
@@ -19,7 +19,7 @@ from mxnet.gluon.nn import BatchNorm
 from .dropblock import DropBlock
 from .splat import SplitAttentionConv
 
-__all__ = ['ResNetV1b', 'BottleneckV1b']
+__all__ = ['ResNet', 'Bottleneck']
 
 def _update_input_size(input_size, stride):
     sh, sw = (stride, stride) if isinstance(stride, int) else stride
@@ -28,8 +28,8 @@ def _update_input_size(input_size, stride):
     input_size = (oh, ow)
     return input_size
 
-class BottleneckV1b(HybridBlock):
-    """ResNetV1b BottleneckV1b
+class Bottleneck(HybridBlock):
+    """ResNet Bottleneck
     """
     # pylint: disable=unused-argument
     expansion = 4
@@ -39,7 +39,7 @@ class BottleneckV1b(HybridBlock):
                  dropblock_prob=0, input_size=None, use_splat=False,
                  radix=2, avd=False, avd_first=False, in_channels=None, 
                  split_drop_ratio=0, **kwargs):
-        super(BottleneckV1b, self).__init__()
+        super(Bottleneck, self).__init__()
         group_width = int(channels * (bottleneck_width / 64.)) * cardinality
         norm_kwargs = norm_kwargs if norm_kwargs is not None else {}
         self.dropblock_prob = dropblock_prob
@@ -58,7 +58,6 @@ class BottleneckV1b(HybridBlock):
                 input_size = _update_input_size(input_size, strides)
                 self.dropblock2 = DropBlock(dropblock_prob, 3, group_width, *input_size)
             self.dropblock3 = DropBlock(dropblock_prob, 3, channels*4, *input_size)
-            #self.skip_drop = DropBlock(dropblock_prob, 3, channels*4, *input_size)
         self.conv1 = nn.Conv2D(channels=group_width, kernel_size=1,
                                use_bias=False, in_channels=in_channels)
         self.bn1 = norm_layer(in_channels=group_width, **norm_kwargs)
@@ -121,16 +120,14 @@ class BottleneckV1b(HybridBlock):
 
         if self.dropblock_prob > 0:
             out = self.dropblock3(out)
-            #residual = self.skip_drop(residual)
 
         out = out + residual
         out = self.relu3(out)
 
         return out
 
-class ResNetV1b(HybridBlock):
-    """ Pre-trained ResNetV1b Model, which produces the strides of 8
-    featuremaps at conv5.
+class ResNet(HybridBlock):
+    """ ResNet Variants Definations
     Parameters
     ----------
     block : Block
@@ -174,7 +171,7 @@ class ResNetV1b(HybridBlock):
         self.radix = radix
         self.split_drop_ratio = split_drop_ratio
         self.avd_first = avd_first
-        super(ResNetV1b, self).__init__(prefix=name_prefix)
+        super(ResNet, self).__init__(prefix=name_prefix)
         norm_kwargs = norm_kwargs if norm_kwargs is not None else {}
         if use_global_stats:
             norm_kwargs['use_global_stats'] = True

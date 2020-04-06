@@ -32,7 +32,6 @@ class DropBlock(HybridBlock):
         mask = F.random.uniform(0, 1, shape=(1, self.c, self.h, self.w), dtype=self.dtype) < gamma
         mask = F.Pooling(mask, pool_type='max',
                          kernel=(self.block_size, self.block_size), pad=self.padding)
-        #mask = F.ones_like(mask, dtype=self.dtype) - mask
         mask = 1 - mask
         y = F.broadcast_mul(F.broadcast_mul(x, mask),
                             (1.0 * self.numel / mask.sum(axis=0, exclude=True).expand_dims(1).expand_dims(1).expand_dims(1)))
