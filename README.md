@@ -265,6 +265,6 @@ year={2020}
 ### Major Contributors
 
 - ResNeSt Backbone ([Hang Zhang](https://hangzhang.org/))
-- Detectron Models ([Chongruo Wu](https://scholar.google.com/citations?hl=en&user=rhVberEAAAAJ), [Zhongyue Zhang](http://zhongyuezhang.com/))
+- Detectron Models ([Chongruo Wu](https://github.com/chongruo), [Zhongyue Zhang](http://zhongyuezhang.com/))
 - Semantic Segmentation ([Yi Zhu](https://sites.google.com/view/yizhu/home))
 - Distributed Training ([Haibin Lin](https://sites.google.com/view/haibinlin/))
