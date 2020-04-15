@@ -33,7 +33,7 @@ pip install resnest --pre
 
 |             | crop size | PyTorch | Gluon |
 |-------------|-----------|---------|-------|
-| ResNeSt-50  | 224       | 81.03   | 81.14 |
+| ResNeSt-50  | 224       | 81.03   | 81.04 |
 | ResNeSt-101 | 256       | 82.83   | 82.81 |
 | ResNeSt-200 | 320       | 83.84   | 83.88 |
 | ResNeSt-269 | 416       | 84.54   | 84.53 |
@@ -265,6 +265,6 @@ year={2020}
 ### Major Contributors
 
 - ResNeSt Backbone ([Hang Zhang](https://hangzhang.org/))
-- Detectron Models ([Chongruo Wu](https://scholar.google.com/citations?hl=en&user=rhVberEAAAAJ), [Zhongyue Zhang](http://zhongyuezhang.com/))
+- Detectron Models ([Chongruo Wu](https://github.com/chongruo), [Zhongyue Zhang](http://zhongyuezhang.com/))
 - Semantic Segmentation ([Yi Zhu](https://sites.google.com/view/yizhu/home))
 - Distributed Training ([Haibin Lin](https://sites.google.com/view/haibinlin/))
