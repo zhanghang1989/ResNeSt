@@ -80,7 +80,7 @@ def main():
     # init the model
     model_kwargs = {}
 
-    assert args.model in torch.hub.list('zhanghang1989/ResNeSt', force_reload=False)
+    assert args.model in torch.hub.list('zhanghang1989/ResNeSt', force_reload=True)
     model = torch.hub.load('zhanghang1989/ResNeSt', args.model, pretrained=True)
     print(model)
 
