@@ -12,7 +12,7 @@ Split-Attention Network, A New ResNet Variant. It significantly boosts the perfo
 ### Table of Contents
 0. [Pretrained Models](#pretrained-models)
 0. [Transfer Learning Models](#transfer-learning-models)
-0. [Verify Models](#verify-models)
+0. [Verify Backbone Models](#verify-backbone-models)
 0. [How to Train](#how-to-train)
 0. [Reference](#reference)
 
@@ -78,7 +78,7 @@ net = resnest50(pretrained=True)
 
 Training code and pretrained models are coming soon.
 
-- Object Detection
+- Object Detection on MS-COCO validation set
 
 
 <table class="tg">
@@ -90,22 +90,22 @@ Training code and pretrained models are coming soon.
   <tr>
     <td rowspan="4" class="tg-0pky">Faster R-CNN</td>
     <td class="tg-0pky">ResNet-50</td>
-    <td class="tg-0pky">38.5</td>
+    <td class="tg-0pky">39.25</td>
   </tr>
   <tr>
     <td class="tg-0lax">ResNet-101</td>
-    <td class="tg-0lax">41.2</td>
+    <td class="tg-0lax">41.37</td>
   </tr>
   <tr>
     <td class="tg-0lax">ResNeSt-50 (<span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>41.4</b></td>
+    <td class="tg-0lax"><b>42.33</b></td>
   </tr>
   <tr>
     <td class="tg-0lax">ResNeSt-101 (<span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>43.8</b></td>
+    <td class="tg-0lax"><b>44.72</b></td>
   </tr>
   <tr>
-    <td rowspan="4" class="tg-0lax">Cascade R-CNN</td>
+    <td rowspan="5" class="tg-0lax">Cascade R-CNN</td>
     <td class="tg-0lax">ResNet-50</td>
     <td class="tg-0lax">42.52</td>
   </tr>
@@ -119,7 +119,11 @@ Training code and pretrained models are coming soon.
   </tr>
   <tr>
     <td class="tg-0lax">ResNeSt-101 (<span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>47.5</b></td>
+    <td class="tg-0lax"><b>47.50</b></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">ResNeSt-200 (<span style="color:red">ours</span>)</td>
+    <td class="tg-0lax"><b>49.03</b></td>
   </tr>
 </table>
 
@@ -179,8 +183,6 @@ Training code and pretrained models are coming soon.
 
 ### Semantic Segmentation
 
-Training code and pretrained models are coming soon.
-
 - Results on ADE20K
 
 <table class="tg">
@@ -213,7 +215,10 @@ Training code and pretrained models are coming soon.
   </tr>
 </table>
 
-## Verify Models:
+- PyTorch Models: Please visit PyTorch Encoding Toolkit.
+- Training with Gluon: Please visit GluonCV Toolkit.
+
+## Verify Backbone Models:
 
 **Note:** the inference speed reported in the paper are tested using Gluon implementation with RecordIO data.
 
@@ -245,7 +250,8 @@ python verify.py --model resnest50 --crop-size 224
 
 ## How to Train
 
-Coming Soon.
+- Training with Gluon: Please visit GluonCV Toolkit.
+- Training with PyTorch: Please visit PyTorch Encoding Toolkit (slightly worse than Gluon implementation).
 
 ## Reference
 
