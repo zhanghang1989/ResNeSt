@@ -1,8 +1,9 @@
 [![PyPI](https://img.shields.io/pypi/v/resnest.svg)](https://pypi.python.org/pypi/resnest)
 [![PyPI Pre-release](https://img.shields.io/badge/pypi--prerelease-v0.0.2-ff69b4.svg)](https://pypi.org/project/resnest/#history)
-[![Upload Python Package](https://github.com/zhanghang1989/ResNeSt/workflows/Upload%20Python%20Package/badge.svg)](https://github.com/zhanghang1989/ResNeSt/actions)
+[![PyPI Nightly](https://github.com/zhanghang1989/ResNeSt/workflows/Pypi%20Nightly/badge.svg)](https://github.com/zhanghang1989/ResNeSt/actions)
 [![Downloads](http://pepy.tech/badge/resnest)](http://pepy.tech/project/resnest)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Unit Test](https://github.com/zhanghang1989/ResNeSt/workflows/Unit%20Test/badge.svg)](https://github.com/zhanghang1989/ResNeSt/actions)
 
 # ResNeSt
 Split-Attention Network, A New ResNet Variant. It significantly boosts the performance of downstream models such as Mask R-CNN, Cascade R-CNN and DeepLabV3.

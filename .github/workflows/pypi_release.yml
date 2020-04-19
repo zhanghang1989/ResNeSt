@@ -1,11 +1,11 @@
 # This workflows will upload a Python Package using Twine when a release is created
 # For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
 
-name: Upload Python Package
+name: Pypi Release
 
 on:
-  schedule:
-    - cron: "0 12 * * *"
+  release:
+    types: [created]
 
 jobs:
   deploy:
@@ -26,6 +26,7 @@ jobs:
       env:
         TWINE_USERNAME: ${{ secrets.pypi_username }}
         TWINE_PASSWORD: ${{ secrets.pypi_password }}
+        RELEASE: 1
       run: |
         python setup.py sdist bdist_wheel
         twine upload dist/* --verbose
