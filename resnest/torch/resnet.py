@@ -55,7 +55,7 @@ class Bottleneck(nn.Module):
                 self.dropblock2 = DropBlock2D(dropblock_prob, 3)
             self.dropblock3 = DropBlock2D(dropblock_prob, 3)
 
-        if radix > 1:
+        if radix >= 1:
             self.conv2 = SplAtConv2d(
                 group_width, group_width, kernel_size=3,
                 stride=stride, padding=dilation,
@@ -104,7 +104,7 @@ class Bottleneck(nn.Module):
             out = self.avd_layer(out)
 
         out = self.conv2(out)
-        if self.radix == 1:
+        if self.radix == 0:
             out = self.bn2(out)
             if self.dropblock_prob > 0.0:
                 out = self.dropblock2(out)

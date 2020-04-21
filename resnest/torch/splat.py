@@ -70,7 +70,7 @@ class SplAtConv2d(Module):
         if self.radix > 1:
             atten = F.softmax(atten, dim=1).view(batch, -1, 1, 1)
         else:
-            atten = F.sigmoid(atten, dim=1).view(batch, -1, 1, 1)
+            atten = F.sigmoid(atten).view(batch, -1, 1, 1)
 
         if self.radix > 1:
             atten = torch.split(atten, channel//self.radix, dim=1)
