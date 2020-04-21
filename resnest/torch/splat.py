@@ -6,11 +6,7 @@ import torch.nn.functional as F
 from torch.nn import Conv2d, Module, Linear, BatchNorm2d, ReLU
 from torch.nn.modules.utils import _pair
 
-__all__ = ['SKConv2d']
-
-class DropBlock2D(object):
-    def __init__(self, *args, **kwargs):
-        raise NotImplementedError
+__all__ = ['SplAtConv2d']
 
 class SplAtConv2d(Module):
     """Split-Attention Conv2d
