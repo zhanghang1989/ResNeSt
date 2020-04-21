@@ -39,7 +39,7 @@ pip install resnest --pre
 | ResNeSt-200 | 320       | 83.84   | 83.88 |
 | ResNeSt-269 | 416       | 84.54   | 84.53 |
 
-**Abaltion study models are available at [link](./ablation.md).**
+**Ablation study models are available in [link](./ablation.md)**
 
 ### PyTorch Models
 
@@ -78,9 +78,9 @@ net = resnest50(pretrained=True)
 
 ### Detectron Models
 
-Training code and pretrained models are coming soon.
+Training code and pretrained models are coming soon at our [Detectron2 Fork](https://github.com/zhanghang1989/detectron2-ResNeSt).
 
-- Object Detection on MS-COCO validation set
+#### Object Detection on MS-COCO validation set
 
 
 <table class="tg">
@@ -129,7 +129,7 @@ Training code and pretrained models are coming soon.
   </tr>
 </table>
 
-- Instance Segmentation
+#### Instance Segmentation
 
 
 <table class="tg">
@@ -185,7 +185,10 @@ Training code and pretrained models are coming soon.
 
 ### Semantic Segmentation
 
-- Results on ADE20K
+- PyTorch models and training: Please visit [PyTorch Encoding Toolkit](https://hangzhang.org/PyTorch-Encoding/model_zoo/segmentation.html).
+- Training with Gluon: Please visit [GluonCV Toolkit](https://gluon-cv.mxnet.io/model_zoo/segmentation.html#ade20k-dataset).
+
+#### Results on ADE20K
 
 <table class="tg">
   <tr>
@@ -217,8 +220,6 @@ Training code and pretrained models are coming soon.
   </tr>
 </table>
 
-- PyTorch Models: Please visit PyTorch Encoding Toolkit.
-- Training with Gluon: Please visit GluonCV Toolkit.
 
 ## Verify Backbone Models:
 
@@ -252,8 +253,8 @@ python verify.py --model resnest50 --crop-size 224
 
 ## How to Train
 
-- Training with Gluon: Please visit GluonCV Toolkit.
-- Training with PyTorch: Please visit PyTorch Encoding Toolkit (slightly worse than Gluon implementation).
+- Training with Gluon: Please visit [GluonCV Toolkit](https://gluon-cv.mxnet.io/model_zoo/classification.html#resnest).
+- Training with PyTorch: Please visit [PyTorch Encoding Toolkit](https://hangzhang.org/PyTorch-Encoding/model_zoo/imagenet.html) (slightly worse than Gluon implementation).
 
 ## Reference
 
