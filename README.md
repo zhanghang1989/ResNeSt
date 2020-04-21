@@ -38,7 +38,7 @@ pip install resnest --pre
 | ResNeSt-200 | 320       | 83.84   | 83.88 |
 | ResNeSt-269 | 416       | 84.54   | 84.53 |
 
-Abaltion study models are available in [link](./ablation.md)
+**Abaltion study models are available at [link](./ablation.md).**
 
 ### PyTorch Models
 
