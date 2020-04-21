@@ -7,6 +7,7 @@
 ##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from .resnest import *
+from .ablation import *
 
 _all__ = ['get_model', 'get_model_list']
 
@@ -15,6 +16,13 @@ models = {
     'resnest101': resnest101,
     'resnest200': resnest200,
     'resnest269': resnest269,
+    'resnest50_fast_1s1x64d': resnest50_fast_1s1x64d,
+    'resnest50_fast_2s1x64d': resnest50_fast_2s1x64d,
+    'resnest50_fast_4s1x64d': resnest50_fast_4s1x64d,
+    'resnest50_fast_1s2x40d': resnest50_fast_1s2x40d,
+    'resnest50_fast_2s2x40d': resnest50_fast_2s2x40d,
+    'resnest50_fast_4s2x40d': resnest50_fast_4s2x40d,
+    'resnest50_fast_1s4x24d': resnest50_fast_1s4x24d,
     }
 
 def get_model(name, **kwargs):
