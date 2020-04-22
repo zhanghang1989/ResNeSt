@@ -49,17 +49,29 @@ def test(network, ctx, val_data):
     num_batch = len(val_data)
     num = 0
     start = time.time()
-    for i, batch in enumerate(val_data):
-        data = gluon.utils.split_and_load(batch[0], ctx_list=ctx, batch_axis=0)
-        label = gluon.utils.split_and_load(batch[1], ctx_list=ctx, batch_axis=0)
+ 
+    iterator = enumerate(val_data)
+    next_batch = next(iterator)
+    next_data = gluon.utils.split_and_load(next_batch[0], ctx_list=ctx, batch_axis=0)
+    next_i, next_label = gluon.utils.split_and_load(next_batch[1], ctx_list=ctx, batch_axis=0)
+    stop = False
+    while not stop:
+        i = next_i
+        data = next_data
+        label = next_label
         outputs = [network(X.astype(opt.dtype, copy=False)) for X in data]
-        acc_top1.update(label, outputs)
-        acc_top5.update(label, outputs)
+        try:
+            next_i, next_batch = next(iterator)
+            next_data = gluon.utils.split_and_load(next_batch[0], ctx_list=ctx, batch_axis=0)
+            next_label = gluon.utils.split_and_load(next_batch[1], ctx_list=ctx, batch_axis=0)
+        except StopIteration:
+            stop = True
 
-        _, top1 = acc_top1.get()
-        _, top5 = acc_top5.get()
-        print('%d / %d : %.8f, %.8f'%(i, num_batch, 1-top1, 1-top5))
-        num += batch_size
+         _, top1 = acc_top1.get()
+         _, top5 = acc_top5.get()
+         print('%d / %d : %.8f, %.8f'%(i, num_batch, 1-top1, 1-top5))
+         num += batch_size
+
     end = time.time()
     speed = num / (end - start)
     print('Throughput is %f img/sec.'% speed)
