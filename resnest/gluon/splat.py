@@ -57,7 +57,7 @@ class SplitAttentionConv(HybridBlock):
         if self.drop:
             atten = self.drop(atten)
         atten = self.fc2(atten).reshape((0, self.radix, self.channels))
-        atten = self.rsoftmax(atten).reshape(0, -1, 1, 1)
+        atten = self.rsoftmax(atten).reshape((0, -1, 1, 1))
         if self.radix > 1:
             atten = F.split(atten, self.radix, axis=1)
             outs = [F.broadcast_mul(att, split) for (att, split) in zip(atten, splited)]
@@ -75,9 +75,9 @@ class rSoftMax(nn.HybridBlock):
 
     def hybrid_forward(self, F, x):
         if self.radix > 1:
-            x = x.reshape(0, self.cardinality, self.radix, -1).swapaxes(1, 2)
+            x = x.reshape((0, self.cardinality, self.radix, -1)).swapaxes(1, 2)
             x = F.softmax(x, axis=1)
-            x = x.reshape(0, -1)
+            x = x.reshape((0, -1))
         else:
             x = F.sigmoid(x)
         return x
