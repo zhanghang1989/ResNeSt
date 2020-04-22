@@ -88,6 +88,6 @@ class rSoftMax(nn.Module):
             x = F.softmax(x, dim=1)
             x = x.reshape(batch, -1)
         else:
-            x = F.sigmoid(x)
+            x = torch.sigmoid(x)
         return x
 
