@@ -175,10 +175,6 @@ if __name__ == '__main__':
         val_data = gluon.data.DataLoader(
             imagenet.classification.ImageNet(opt.data_dir, train=False).transform_first(transform_test),
             batch_size=batch_size, shuffle=False, num_workers=num_workers)
-        def batch_fn(batch, ctx):
-            data = gluon.utils.split_and_load(batch[0], ctx_list=ctx, batch_axis=0)
-            label = gluon.utils.split_and_load(batch[1], ctx_list=ctx, batch_axis=0)
-            return data, label
     else:
         imgrec = os.path.join(opt.rec_dir, 'val.rec')
         imgidx = os.path.join(opt.rec_dir, 'val.idx')
@@ -186,11 +182,10 @@ if __name__ == '__main__':
             mx.gluon.data.vision.ImageRecordDataset(imgrec).transform_first(transform_test),
             batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
-        def batch_fn(batch, ctx):
-            data = gluon.utils.split_and_load(batch.data[0], ctx_list=ctx, batch_axis=0)
-            label = gluon.utils.split_and_load(batch.label[0], ctx_list=ctx, batch_axis=0)
-            return data, label
-        
+    def batch_fn(batch, ctx):
+        data = gluon.utils.split_and_load(batch[0], ctx_list=ctx, batch_axis=0)
+        label = gluon.utils.split_and_load(batch[1], ctx_list=ctx, batch_axis=0)
+        return data, label
 
     err_top1_val, err_top5_val = test(net, ctx, val_data, batch_fn)
     print(err_top1_val, err_top5_val)
