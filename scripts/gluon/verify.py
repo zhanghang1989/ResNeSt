@@ -28,12 +28,12 @@ def parse_args():
                         help='number of preprocessing workers')
     parser.add_argument('--model', type=str, default='model', required=False,
                         help='type of model to use. see vision_model for options.')
+    parser.add_argument('--resume', type=str, default=None,
+                        help='put the path to resuming file if needed')
     parser.add_argument('--crop-size', type=int, default=224,
                         help='input shape of the image, default is 224.')
     parser.add_argument('--crop-ratio', type=float, default=0.875,
                         help='The ratio for crop and input size, for validation dataset only')
-    parser.add_argument('--params-file', type=str,
-                        help='local parameter file to load, instead of pre-trained weight.')
     parser.add_argument('--dtype', type=str,
                         help='training data type')
     parser.add_argument('--dilation', type=int, default=1,
@@ -85,44 +85,6 @@ def test(network, ctx, val_data, batch_fn):
     return (1-top1, 1-top5)
 
 
-class ToPIL(object):
-    """Convert image from ndarray format to PIL
-    """
-    def __call__(self, img):
-        x = Image.fromarray(img.asnumpy())
-        return x
-
-class ToNDArray(object):
-    def __call__(self, img):
-        x = mx.nd.array(np.array(img), mx.cpu(0))
-        return x
-
-class ECenterCrop:
-    """Crop the given PIL Image and resize it to desired size.
-    Args:
-        img (PIL Image): Image to be cropped. (0,0) denotes the top left corner of the image.
-        output_size (sequence or int): (height, width) of the crop box. If int,
-            it is used for both directions
-    Returns:
-        PIL Image: Cropped image.
-    """
-    def __init__(self, imgsize):
-        self.imgsize = imgsize
-        import torchvision.transforms as pth_transforms
-        self.resize_method = pth_transforms.Resize((imgsize, imgsize), interpolation=Image.BICUBIC)
-
-    def __call__(self, img):
-        image_width, image_height = img.size
-        image_short = min(image_width, image_height)
-
-        crop_size = float(self.imgsize) / (self.imgsize + 32) * image_short
-
-        crop_height, crop_width = crop_size, crop_size
-        crop_top = int(round((image_height - crop_height) / 2.))
-        crop_left = int(round((image_width - crop_width) / 2.))
-        img = img.crop((crop_left, crop_top, crop_left + crop_width, crop_top + crop_height))
-        return self.resize_method(img)
-
 if __name__ == '__main__':
     opt = parse_args()
 
@@ -137,7 +99,7 @@ if __name__ == '__main__':
 
     input_size = opt.crop_size
     model_name = opt.model
-    pretrained = True if not opt.params_file else False
+    pretrained = True if not opt.resume else False
 
     kwargs = {'ctx': ctx, 'pretrained': pretrained, 'classes': classes}
 
@@ -146,8 +108,8 @@ if __name__ == '__main__':
 
     net = get_model(model_name, **kwargs)
     net.cast(opt.dtype)
-    if opt.params_file:
-        net.load_parameters(opt.params_file, ctx=ctx)
+    if opt.resume:
+        net.load_parameters(opt.resume, ctx=ctx)
     else:
         net.hybridize()
 
@@ -156,6 +118,8 @@ if __name__ == '__main__':
     resize = int(math.ceil(input_size/crop_ratio))
 
     if input_size >= 320:
+        from resnest.transforms import ECenterCrop
+        from resnest.gluon.data_utils import ToPIL, ToNDArray
         transform_test = transforms.Compose([
             ToPIL(),
             ECenterCrop(input_size),

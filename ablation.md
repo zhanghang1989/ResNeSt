@@ -6,7 +6,7 @@
 | ResNeSt-50-fast | 2s1x64d | 27.5M | 4.34   | 80.53   | 80.65 |
 | ResNeSt-50-fast | 4s1x64d | 31.9M | 4.35   | 80.76   | 80.90 |
 | ResNeSt-50-fast | 1s2x40d | 25.9M | 4.38   | 80.59   | 80.72 |
-| ResNeSt-50-fast | 2s2x40d | 26.9M | 4.38   | 80.97   | 81.00 |
+| ResNeSt-50-fast | 2s2x40d | 26.9M | 4.38   | xx.xx   | 80.85 |
 | ResNeSt-50-fast | 4s2x40d | 30.4M | 4.41   | 80.86   | 80.92 |
 | ResNeSt-50-fast | 1s4x24d | 25.7M | 4.42   | 80.99   | 80.97 |
 

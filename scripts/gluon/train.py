@@ -31,18 +31,19 @@ import logging
 import math
 import time
 import random
+from PIL import Image
 
-from resnest.gluon import get_model
-from resnest.utils import mkdir
 import horovod.mxnet as hvd
 import mxnet as mx
 import numpy as np
 from mxnet import autograd, gluon, lr_scheduler
 from mxnet.io import DataBatch, DataIter
-
 from mxnet.gluon.data.vision import transforms
 
-from PIL import Image
+from resnest.gluon import get_model
+from resnest.utils import mkdir
+from resnest.transforms import ERandomCrop, ECenterCrop
+from torchvision.transforms import transforms as pth_transforms
 
 try:
     from mpi4py import MPI
@@ -195,18 +196,15 @@ def get_train_data(rec_train, batch_size, data_nthreads, input_size, crop_ratio,
     train_transforms = []
     if args.auto_aug:
         print('Using AutoAugment')
-        from autogluon.utils.augment import AugmentationBlock, autoaug_imagenet_policies
+        from resnest.gluon.data_utils import AugmentationBlock, autoaug_imagenet_policies
         train_transforms.append(AugmentationBlock(autoaug_imagenet_policies()))
-
-    from gluoncv.utils.transforms import EfficientNetRandomCrop
-    from autogluon.utils import pil_transforms
 
     if input_size >= 320:
         train_transforms.extend([
-            EfficientNetRandomCrop(input_size),
-            pil_transforms.Resize((input_size, input_size), interpolation=Image.BICUBIC),
-            pil_transforms.RandomHorizontalFlip(),
-            pil_transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4),
+            ERandomCrop(input_size),
+            pth_transforms.Resize((input_size, input_size), interpolation=Image.BICUBIC),
+            pth_transforms.RandomHorizontalFlip(),
+            pth_transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4),
             transforms.RandomLighting(lighting_param),
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
@@ -243,15 +241,13 @@ def get_val_data(rec_val, batch_size, data_nthreads, input_size, crop_ratio):
     crop_ratio = crop_ratio if crop_ratio > 0 else 0.875
     resize = int(math.ceil(input_size/crop_ratio))
 
-    from gluoncv.utils.transforms import EfficientNetCenterCrop
-    from autogluon.utils import pil_transforms
 
     if input_size >= 320:
         transform_test = transforms.Compose([
-            pil_transforms.ToPIL(),
-            EfficientNetCenterCrop(input_size),
-            pil_transforms.Resize((input_size, input_size), interpolation=Image.BICUBIC),
-            pil_transforms.ToNDArray(),
+            pth_transforms.ToPIL(),
+            ECenterCrop(input_size),
+            pth_transforms.Resize((input_size, input_size), interpolation=Image.BICUBIC),
+            pth_transforms.ToNDArray(),
             transforms.ToTensor(),
             normalize
         ])
@@ -296,7 +292,7 @@ if args.dropblock_prob > 0:
 net = get_model(args.model, **kwargs)
 net.cast(args.dtype)
 
-from gluoncv.nn.dropblock import DropBlockScheduler
+from resnest.gluon.dropblock import DropBlockScheduler
 # does not impact normal model
 drop_scheduler = DropBlockScheduler(net, 0, 0.1, args.num_epochs)
 
