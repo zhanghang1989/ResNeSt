@@ -20,6 +20,7 @@ def test_model_inference():
     get_model = importlib.import_module('resnest.torch')
     x = torch.rand(1, 3, 224, 224)
     for model_name in model_list:
+        if 'fast' in model_name: continue
         print('Doing: ', model_name)
         net = getattr(get_model, model_name)
         model = net(pretrained=True)
