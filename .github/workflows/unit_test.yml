@@ -12,27 +12,23 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - uses: actions/checkout@v2
-      - uses: seanmiddleditch/gha-setup-ninja@master
 
       - name: Set up Python
-        uses: actions/setup-python@v1
+        uses: actions/github-script@0.3.0
         with:
-          python-version: 3.7
+          github-token: ${{github.token}}
+          script: |
+            const core = require('@actions/core')
+            core.exportVariable("PATH", "/home/ubuntu/anaconda3/bin:/usr/local/bin:/usr/bin/:/bin:$PATH")
           
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install numpy -I
-          pip install pytest torch
-          pip install nose
-
       - name: Install package
         run: |
           python -m pip install --upgrade pip
+          pip install nose
           pip install -e .
             
       - name: Run pytest
