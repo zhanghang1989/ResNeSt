@@ -78,7 +78,7 @@ net = resnest50(pretrained=True)
 
 ### Detectron Models
 
-Training code and pretrained models are coming soon at our [Detectron2 Fork](https://github.com/zhanghang1989/detectron2-ResNeSt).
+Training code and pretrained models are released at our [Detectron2 Fork](https://github.com/zhanghang1989/detectron2-ResNeSt).
 
 #### Object Detection on MS-COCO validation set
 
