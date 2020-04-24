@@ -253,8 +253,19 @@ python verify.py --model resnest50 --crop-size 224
 
 ## How to Train
 
-- Training with Gluon: Please visit [GluonCV Toolkit](https://gluon-cv.mxnet.io/model_zoo/classification.html#resnest).
+### ImageNet Models
+
+- Training with MXNet Gluon: Please visit [Gluon folder](./scripts/gluon/).
 - Training with PyTorch: Please visit [PyTorch Encoding Toolkit](https://hangzhang.org/PyTorch-Encoding/model_zoo/imagenet.html) (slightly worse than Gluon implementation).
+
+### Detectron Models
+
+For object detection and instance segmentation models, please visit our [detectron2-ResNeSt fork](https://github.com/zhanghang1989/detectron2-ResNeSt).
+
+### Semantic Segmentation
+ 
+- Training with PyTorch: [Encoding Toolkit](https://hangzhang.org/PyTorch-Encoding/model_zoo/segmentation.html).
+- Training with MXNet: [GluonCV Toolkit](https://gluon-cv.mxnet.io/model_zoo/segmentation.html#ade20k-dataset).
 
 ## Reference
 

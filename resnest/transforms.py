@@ -374,7 +374,7 @@ class ERandomCrop:
             if area < self.min_covered * (original_width * original_height):
                 continue
             if width == original_width and height == original_height:
-                return self._fallback(img)      # https://github.com/tensorflow/tpu/blob/master/models/official/efficientnet/preprocessing.py#L102
+                return self._fallback(img)
 
             x = random.randint(0, original_width - width)
             y = random.randint(0, original_height - height)
