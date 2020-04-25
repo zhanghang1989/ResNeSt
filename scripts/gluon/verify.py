@@ -8,7 +8,6 @@ from mxnet import gluon
 from mxnet.gluon.data.vision import transforms
 from mxnet.contrib.quantization import *
 
-from gluoncv.data import imagenet
 from resnest.gluon import get_model
 
 from PIL import Image
@@ -136,6 +135,7 @@ if __name__ == '__main__':
         ])
 
     if not opt.rec_dir:
+        from gluoncv.data import imagenet
         val_data = gluon.data.DataLoader(
             imagenet.classification.ImageNet(opt.data_dir, train=False).transform_first(transform_test),
             batch_size=batch_size, shuffle=False, num_workers=num_workers)

@@ -21,8 +21,8 @@ _model_sha256 = {name: checksum for checksum, name in [
     ('44938639', 'resnest50_fast_2s1x64d'),
     ('f74f3fc3', 'resnest50_fast_4s1x64d'),
     ('32830b84', 'resnest50_fast_1s2x40d'),
-    ('0e48a197', 'resnest50_fast_2s2x40d'),
-    ('59057aca', 'resnest50_fast_4s2x40d'),
+    ('9d126481', 'resnest50_fast_2s2x40d'),
+    ('41d14ed0', 'resnest50_fast_4s2x40d'),
     ('d4a4f76f', 'resnest50_fast_1s4x24d'),
     ]}
 

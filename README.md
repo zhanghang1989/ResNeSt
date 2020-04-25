@@ -5,6 +5,8 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Unit Test](https://github.com/zhanghang1989/ResNeSt/workflows/Unit%20Test/badge.svg)](https://github.com/zhanghang1989/ResNeSt/actions)
 
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/resnest-split-attention-networks/semantic-segmentation-on-ade20k)](https://paperswithcode.com/sota/semantic-segmentation-on-ade20k?p=resnest-split-attention-networks)
+
 # ResNeSt
 Split-Attention Network, A New ResNet Variant. It significantly boosts the performance of downstream models such as Mask R-CNN, Cascade R-CNN and DeepLabV3.
 
@@ -198,7 +200,7 @@ Training code and pretrained models are released at our [Detectron2 Fork](https:
     <th class="tg-cly1">mIoU%</th>
   </tr>
   <tr>
-    <td rowspan="4" class="tg-cly1">Deeplab-V3<br></td>
+    <td rowspan="5" class="tg-cly1">Deeplab-V3<br></td>
     <td class="tg-cly1">ResNet-50</td>
     <td class="tg-cly1">80.39</td>
     <td class="tg-cly1">42.1</td>
@@ -217,6 +219,11 @@ Training code and pretrained models are released at our [Detectron2 Fork](https:
     <td class="tg-0lax">ResNeSt-101 (<span style="color:red">ours</span>)</td>
     <td class="tg-0lax"><b>82.07</td>
     <td class="tg-0lax"><b>46.91</b></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">ResNeSt-269 (<span style="color:red">ours</span>)</td>
+    <td class="tg-0lax"><b>82.62</td>
+    <td class="tg-0lax"><b>47.60</b></td>
   </tr>
 </table>
 
@@ -253,8 +260,19 @@ python verify.py --model resnest50 --crop-size 224
 
 ## How to Train
 
-- Training with Gluon: Please visit [GluonCV Toolkit](https://gluon-cv.mxnet.io/model_zoo/classification.html#resnest).
+### ImageNet Models
+
+- Training with MXNet Gluon: Please visit [Gluon folder](./scripts/gluon/).
 - Training with PyTorch: Please visit [PyTorch Encoding Toolkit](https://hangzhang.org/PyTorch-Encoding/model_zoo/imagenet.html) (slightly worse than Gluon implementation).
+
+### Detectron Models
+
+For object detection and instance segmentation models, please visit our [detectron2-ResNeSt fork](https://github.com/zhanghang1989/detectron2-ResNeSt).
+
+### Semantic Segmentation
+ 
+- Training with PyTorch: [Encoding Toolkit](https://hangzhang.org/PyTorch-Encoding/model_zoo/segmentation.html).
+- Training with MXNet: [GluonCV Toolkit](https://gluon-cv.mxnet.io/model_zoo/segmentation.html#ade20k-dataset).
 
 ## Reference
 
