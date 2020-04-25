@@ -1,5 +1,5 @@
 [![PyPI](https://img.shields.io/pypi/v/resnest.svg)](https://pypi.python.org/pypi/resnest)
-[![PyPI Pre-release](https://img.shields.io/badge/pypi--prerelease-v0.0.3-ff69b4.svg)](https://pypi.org/project/resnest/#history)
+[![PyPI Pre-release](https://img.shields.io/badge/pypi--prerelease-v0.0.4-ff69b4.svg)](https://pypi.org/project/resnest/#history)
 [![PyPI Nightly](https://github.com/zhanghang1989/ResNeSt/workflows/Pypi%20Nightly/badge.svg)](https://github.com/zhanghang1989/ResNeSt/actions)
 [![Downloads](http://pepy.tech/badge/resnest)](http://pepy.tech/project/resnest)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
