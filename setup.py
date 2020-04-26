@@ -19,7 +19,7 @@ try:
     if not os.getenv('RELEASE'):
         from datetime import date
         today = date.today()
-        day = today.strftime("b%d%m%Y")
+        day = today.strftime("b%Y%m%d")
         version += day
 except Exception:
     pass
