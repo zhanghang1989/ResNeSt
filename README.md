@@ -200,7 +200,7 @@ Training code and pretrained models are released at our [Detectron2 Fork](https:
     <th class="tg-cly1">mIoU%</th>
   </tr>
   <tr>
-    <td rowspan="5" class="tg-cly1">Deeplab-V3<br></td>
+    <td rowspan="6" class="tg-cly1">Deeplab-V3<br></td>
     <td class="tg-cly1">ResNet-50</td>
     <td class="tg-cly1">80.39</td>
     <td class="tg-cly1">42.1</td>
@@ -219,6 +219,11 @@ Training code and pretrained models are released at our [Detectron2 Fork](https:
     <td class="tg-0lax">ResNeSt-101 (<span style="color:red">ours</span>)</td>
     <td class="tg-0lax"><b>82.07</td>
     <td class="tg-0lax"><b>46.91</b></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">ResNeSt-200 (<span style="color:red">ours</span>)</td>
+    <td class="tg-0lax"><b>82.45</td>
+    <td class="tg-0lax"><b>48.36</b></td>
   </tr>
   <tr>
     <td class="tg-0lax">ResNeSt-269 (<span style="color:red">ours</span>)</td>
