@@ -221,6 +221,11 @@ Training code and pretrained models are released at our [Detectron2 Fork](https:
     <td class="tg-0lax"><b>46.91</b></td>
   </tr>
   <tr>
+    <td class="tg-0lax">ResNeSt-200 (<span style="color:red">ours</span>)</td>
+    <td class="tg-0lax"><b>82.45</td>
+    <td class="tg-0lax"><b>48.36</b></td>
+  </tr>
+  <tr>
     <td class="tg-0lax">ResNeSt-269 (<span style="color:red">ours</span>)</td>
     <td class="tg-0lax"><b>82.62</td>
     <td class="tg-0lax"><b>47.60</b></td>
