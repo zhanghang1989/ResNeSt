@@ -14,12 +14,12 @@ from setuptools import setup, find_packages
 
 cwd = os.path.dirname(os.path.abspath(__file__))
 
-version = '0.0.3'
+version = '0.0.4'
 try:
     if not os.getenv('RELEASE'):
         from datetime import date
         today = date.today()
-        day = today.strftime("b%d%m%Y")
+        day = today.strftime("b%Y%m%d")
         version += day
 except Exception:
     pass
