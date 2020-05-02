@@ -5,6 +5,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Unit Test](https://github.com/zhanghang1989/ResNeSt/workflows/Unit%20Test/badge.svg)](https://github.com/zhanghang1989/ResNeSt/actions)
 
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/resnest-split-attention-networks/instance-segmentation-on-coco-minival)](https://paperswithcode.com/sota/instance-segmentation-on-coco-minival?p=resnest-split-attention-networks)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/resnest-split-attention-networks/semantic-segmentation-on-ade20k)](https://paperswithcode.com/sota/semantic-segmentation-on-ade20k?p=resnest-split-attention-networks)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/resnest-split-attention-networks/semantic-segmentation-on-pascal-context)](https://paperswithcode.com/sota/semantic-segmentation-on-pascal-context?p=resnest-split-attention-networks)
 
@@ -164,7 +165,7 @@ Training code and pretrained models are released at our [Detectron2 Fork](https:
     <td class="tg-0lax"><b>40.65</b></td>
   </tr>
   <tr>
-    <td rowspan="4" class="tg-0lax">Cascade R-CNN</td>
+    <td rowspan="5" class="tg-0lax">Cascade R-CNN</td>
     <td class="tg-0lax">ResNet-50</td>
     <td class="tg-0lax">43.06</td>
     <td class="tg-0lax">37.19</td>
@@ -183,6 +184,11 @@ Training code and pretrained models are released at our [Detectron2 Fork](https:
     <td class="tg-0lax">ResNeSt-101 (<span style="color:red">ours</span>)</td>
     <td class="tg-0lax"><b>48.30</b></td>
     <td class="tg-0lax"><b>41.56</b></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">ResNeSt-200 (w/ tricks <span style="color:red">ours</span>)</td>
+    <td class="tg-0lax"><b>50.54</b></td>
+    <td class="tg-0lax"><b>44.21</b></td>
   </tr>
 </table>
 
