@@ -242,6 +242,28 @@ Training code and pretrained models are released at our [Detectron2 Fork](https:
   </tr>
 </table>
 
+#### Results on Cityscapes
+
+<table class="tg">
+  <tr>
+    <th class="tg-cly1">Method</th>
+    <th class="tg-cly1">Backbone</th>
+    <th class="tg-cly1">Split</th>
+    <th class="tg-cly1">mIoU%</th>
+  </tr>
+  <tr>
+    <td rowspan="2" class="tg-cly1">Deeplab-V3+<br></td>
+    <td class="tg-cly1">ResNeSt-200 (<span style="color:red">ours</span>)</td>
+    <td class="tg-cly1"><b>Validation</td>
+    <td class="tg-cly1"><b>48.36</b></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">ResNeSt-200 (<span style="color:red">ours</span>)</td>
+    <td class="tg-0lax"><b>Test</td>
+    <td class="tg-0lax"><b>47.60</b></td>
+  </tr>
+</table>
+
 
 ## Verify Backbone Models:
 
