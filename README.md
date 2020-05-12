@@ -263,13 +263,13 @@ Training code and pretrained models are released at our [Detectron2 Fork](https:
     <td class="tg-cly1">ResNeSt-200 (<span style="color:red">ours</span>)</td>
     <td class="tg-cly1">Validation</td>
     <td class="tg-cly1">yes</td>
-    <td class="tg-cly1">83.8</td>
+    <td class="tg-cly1"><b>83.8<b></td>
   </tr>
   <tr>
     <td class="tg-0lax">ResNeSt-200 (<span style="color:red">ours</span>)</td>
     <td class="tg-0lax">Test</td>
     <td class="tg-cly1">yes</td>
-    <td class="tg-0lax">83.3</td>
+    <td class="tg-0lax"><b>83.3<b></td>
   </tr>
 </table>
 
