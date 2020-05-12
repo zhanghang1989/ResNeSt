@@ -249,18 +249,27 @@ Training code and pretrained models are released at our [Detectron2 Fork](https:
     <th class="tg-cly1">Method</th>
     <th class="tg-cly1">Backbone</th>
     <th class="tg-cly1">Split</th>
+    <th class="tg-cly1">w Mapillary</th>
     <th class="tg-cly1">mIoU%</th>
   </tr>
   <tr>
-    <td rowspan="2" class="tg-cly1">Deeplab-V3+<br></td>
+    <td rowspan="3" class="tg-cly1">Deeplab-V3+<br></td>
     <td class="tg-cly1">ResNeSt-200 (<span style="color:red">ours</span>)</td>
-    <td class="tg-cly1"><b>Validation</td>
-    <td class="tg-cly1"><b>48.36</b></td>
+    <td class="tg-cly1">Validation</td>
+    <td class="tg-cly1">no</td>
+    <td class="tg-cly1">82.7</td>
+  </tr>
+  <tr>
+    <td class="tg-cly1">ResNeSt-200 (<span style="color:red">ours</span>)</td>
+    <td class="tg-cly1">Validation</td>
+    <td class="tg-cly1">yes</td>
+    <td class="tg-cly1">83.8</td>
   </tr>
   <tr>
     <td class="tg-0lax">ResNeSt-200 (<span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>Test</td>
-    <td class="tg-0lax"><b>47.60</b></td>
+    <td class="tg-0lax">Test</td>
+    <td class="tg-cly1">yes</td>
+    <td class="tg-0lax">83.3</td>
   </tr>
 </table>
 
