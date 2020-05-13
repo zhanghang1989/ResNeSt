@@ -46,7 +46,9 @@ pip install resnest --pre
 | ResNeSt-200 | 320       | 83.84   | 83.88 |
 | ResNeSt-269 | 416       | 84.54   | 84.53 |
 
-**Ablation study models are available in [link](./ablation.md)**
+- **3rd party Tensorflow implementation** is available at [link](https://github.com/QiaoranC/tf_ResNeSt_RegNet_model).
+
+- Extra ablation study models are available in [link](./ablation.md)
 
 ### PyTorch Models
 
