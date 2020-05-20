@@ -172,7 +172,7 @@ Training code and pretrained models are released at our [Detectron2 Fork](https:
     <td class="tg-0lax"><b>40.65</b></td>
   </tr>
   <tr>
-    <td rowspan="6" class="tg-0lax">Cascade R-CNN</td>
+    <td rowspan="7" class="tg-0lax">Cascade R-CNN</td>
     <td class="tg-0lax">ResNet-50</td>
     <td class="tg-0lax">43.06</td>
     <td class="tg-0lax">37.19</td>
@@ -198,11 +198,17 @@ Training code and pretrained models are released at our [Detectron2 Fork](https:
     <td class="tg-0lax"><b>44.21</b></td>
   </tr>
    <tr>
-    <td class="tg-0lax">ResNeSt-200-dcn (w/ tricks <span style="color:red">ours</span>)</td>
+    <td rowspan="2" class="tg-0lax">ResNeSt-200-dcn (w/ tricks <span style="color:red">ours</span>)</td>
     <td class="tg-0lax"><b>50.91</b></td>
     <td class="tg-0lax"><b>44.50</b></td>
   </tr>
+   <tr>
+    <td class="tg-0lax"><b>53.30*</b></td>
+    <td class="tg-0lax"><b>47.10*</b></td>
+  </tr>
 </table>
+
+All of results are reported on COCO-2017 validation dataset. The values with * demonstrate the mutli-scale testing performance on the test-dev2019.
 
 ## Panoptic Segmentation
 <table class="tg">
