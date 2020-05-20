@@ -172,7 +172,7 @@ Training code and pretrained models are released at our [Detectron2 Fork](https:
     <td class="tg-0lax"><b>40.65</b></td>
   </tr>
   <tr>
-    <td rowspan="5" class="tg-0lax">Cascade R-CNN</td>
+    <td rowspan="6" class="tg-0lax">Cascade R-CNN</td>
     <td class="tg-0lax">ResNet-50</td>
     <td class="tg-0lax">43.06</td>
     <td class="tg-0lax">37.19</td>
@@ -197,6 +197,27 @@ Training code and pretrained models are released at our [Detectron2 Fork](https:
     <td class="tg-0lax"><b>50.54</b></td>
     <td class="tg-0lax"><b>44.21</b></td>
   </tr>
+   <tr>
+    <td class="tg-0lax">ResNeSt-200-dcn (w/ tricks <span style="color:red">ours</span>)</td>
+    <td class="tg-0lax"><b>50.91</b></td>
+    <td class="tg-0lax"><b>44.50</b></td>
+  </tr>
+</table>
+
+## Panoptic Segmentation
+<table class="tg">
+  <tr>
+    <th class="tg-0pky">Backbone</th>
+    <th class="tg-0pky">bbox</th>
+    <th class="tg-0lax">mask</th>
+    <th class="tg-0lax">PQ</th>
+  </tr>
+  <tr>
+    <td class="tg-0pky">ResNeSt-200</td>
+    <td class="tg-0pky">51.00</td>
+    <td class="tg-0lax">43.68</td>
+    <td class="tg-0lax">47.90</td>
+   </tr> 
 </table>
 
 ### Semantic Segmentation
