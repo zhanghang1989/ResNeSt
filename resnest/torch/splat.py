@@ -54,7 +54,10 @@ class SplAtConv2d(Module):
 
         batch, rchannel = x.shape[:2]
         if self.radix > 1:
-            splited = torch.split(x, rchannel//self.radix, dim=1)
+            if torch.__version__ < '1.5':
+                splited = torch.split(x, int(rchannel//self.radix), dim=1)
+            else:
+                splited = torch.split(x, rchannel//self.radix, dim=1)
             gap = sum(splited) 
         else:
             gap = x
@@ -69,7 +72,10 @@ class SplAtConv2d(Module):
         atten = self.rsoftmax(atten).view(batch, -1, 1, 1)
 
         if self.radix > 1:
-            attens = torch.split(atten, rchannel//self.radix, dim=1)
+            if torch.__version__ < '1.5':
+                attens = torch.split(atten, int(rchannel//self.radix), dim=1)
+            else:
+                attens = torch.split(atten, rchannel//self.radix, dim=1)
             out = sum([att*split for (att, split) in zip(attens, splited)])
         else:
             out = atten * x
