@@ -14,7 +14,7 @@ __all__ = ['resnest50_fast_1s1x64d', 'resnest50_fast_2s1x64d', 'resnest50_fast_4
            'resnest50_fast_1s2x40d', 'resnest50_fast_2s2x40d', 'resnest50_fast_4s2x40d',
            'resnest50_fast_1s4x24d']
 
-_url_format = 'https://hangzh.s3.amazonaws.com/encoding/models/{}-{}.pth'
+_url_format = 'https://s3.us-west-1.wasabisys.com/resnest/torch/{}-{}.pth'
 
 _model_sha256 = {name: checksum for checksum, name in [
     ('d8fbf808', 'resnest50_fast_1s1x64d'),
