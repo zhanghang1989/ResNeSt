@@ -28,6 +28,7 @@ jobs:
       - name: Install package
         run: |
           python -m pip install --upgrade pip
+          pip uninstall -y mxnet-cu100
           pip install mxnet-cu100
           pip install nose
           pip install -e .
