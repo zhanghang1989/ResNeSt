@@ -70,7 +70,7 @@ class RadixMajorNaiveImp(Module):
                 atten_k = F.softmax(atten_k, dim=1)
             else:
                 x_k = all_groups[k]
-                atten_k = F.sigmoid(atten_k)
+                atten_k = torch.sigmoid(atten_k)
             attended_k = x_k * atten_k.view(batch, -1, 1, 1)
             out_k = sum(torch.split(attended_k, attended_k.size(1)//self.radix, dim=1))
             out.append(out_k)
