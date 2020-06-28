@@ -33,4 +33,4 @@ jobs:
             
       - name: Run pytest
         run: |
-          nosetests -v tests/
+          for f in tests/*.py; do python "$f"; done

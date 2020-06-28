@@ -7,25 +7,22 @@
 ## LICENSE file in the root directory of this source tree 
 ##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-import torch
-import importlib
-import inspect
+import mxnet as mx
 
 def test_model_inference():
     # get all models
-    import resnest.torch as module
-    functions = inspect.getmembers(module, inspect.isfunction)
-    model_list = [f[0] for f in functions]
+    from resnest.gluon.model_store import _model_sha1
+    from resnest.gluon import get_model
 
-    get_model = importlib.import_module('resnest.torch')
-    x = torch.rand(1, 3, 224, 224)
+    model_list = _model_sha1.keys()
+
+    x = mx.random.uniform(shape=(1, 3, 224, 224))
     for model_name in model_list:
         print('Doing: ', model_name)
-        net = getattr(get_model, model_name)
-        model = net(pretrained=True)
-        model.eval()
+        model = get_model(model_name, pretrained=True)
         y = model(x)
 
 if __name__ == "__main__":
     import nose
     nose.runmodule()
+

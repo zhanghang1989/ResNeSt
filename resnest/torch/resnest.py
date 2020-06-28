@@ -12,7 +12,7 @@ from .resnet import ResNet, Bottleneck
 
 __all__ = ['resnest50', 'resnest101', 'resnest200', 'resnest269']
 
-_url_format = 'https://s3.us-west-1.wasabisys.com/resnest/{}-{}.pth'
+_url_format = 'https://s3.us-west-1.wasabisys.com/resnest/torch/{}-{}.pth'
 
 _model_sha256 = {name: checksum for checksum, name in [
     ('528c19ca', 'resnest50'),
