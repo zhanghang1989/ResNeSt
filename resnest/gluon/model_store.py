@@ -29,8 +29,8 @@ _model_sha1 = {name: checksum for checksum, name in [
     ('7318153ddb5e542a20cc6c58192f3c6209cff9ed', 'resnest50_fast_1s4x24d'),
     ]}
 
-encoding_repo_url = 'https://hangzh.s3-us-west-1.amazonaws.com/'
-_url_format = '{repo_url}gluon/models/{file_name}.zip'
+encoding_repo_url = 'https://s3.us-west-1.wasabisys.com/resnest/'
+_url_format = '{repo_url}gluon/{file_name}.zip'
 
 def short_hash(name):
     if name not in _model_sha1:
