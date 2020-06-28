@@ -18,7 +18,6 @@ def test_model_inference():
 
     x = mx.random.uniform(shape=(1, 3, 224, 224))
     for model_name in model_list:
-        if 'fast' in model_name: continue
         print('Doing: ', model_name)
         model = get_model(model_name, pretrained=True)
         y = model(x)
