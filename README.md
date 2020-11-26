@@ -87,6 +87,10 @@ net = resnest50(pretrained=True)
 
 ## Transfer Learning Models
 
+### MMDetection
+
+The ResNeSt backbone has been adopted by [MMDetection](https://github.com/open-mmlab/mmdetection/tree/master/configs/resnest).
+
 ### Detectron Models
 
 Training code and pretrained models are released at our [Detectron2 Fork](https://github.com/zhanghang1989/detectron2-ResNeSt).
@@ -210,7 +214,7 @@ Training code and pretrained models are released at our [Detectron2 Fork](https:
 
 All of results are reported on COCO-2017 validation dataset. The values with * demonstrate the mutli-scale testing performance on the test-dev2019.
 
-## Panoptic Segmentation
+#### Panoptic Segmentation
 <table class="tg">
   <tr>
     <th class="tg-0pky">Backbone</th>
