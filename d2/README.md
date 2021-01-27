@@ -9,7 +9,26 @@
 Code for detection and instance segmentation experiments in [ResNeSt](https://hangzhang.org/files/resnest.pdf).
 
 
-## Object Detection
+## Training and Inference
+Please follow [INSTALL.md](https://github.com/facebookresearch/detectron2/blob/master/INSTALL.md) to install detectron2. 
+
+To train a model with 8 gpus, please run
+```shell
+python train_net.py  --num-gpus 8 --config-file your_config.yaml
+```
+
+For inference
+```shell
+python train_net.py  \
+    --config-file your_config.yaml
+    --eval-only MODEL.WEIGHTS /path/to/checkpoint_file
+```
+
+For the inference demo, please see [GETTING_STARTED.md](https://github.com/facebookresearch/detectron2/blob/master/GETTING_STARTED.md).
+
+## Pretrained Models
+
+### Object Detection
 <table class="tg">
   <tr>
     <th class="tg-0pky">Method</th>
@@ -75,7 +94,7 @@ We train all models with FPN, SyncBN and image scale augmentation (short size of
 
 
 
-## Instance Segmentation
+### Instance Segmentation
 <table class="tg">
   <tr>
     <th class="tg-0pky">Method</th>
@@ -156,7 +175,7 @@ All models are trained along with FPN and SyncBN. For data augmentation,input im
 
 
 
-## Panoptic Segmentation
+### Panoptic Segmentation
 <table class="tg">
   <tr>
     <th class="tg-0pky">Backbone</th>
@@ -174,24 +193,6 @@ All models are trained along with FPN and SyncBN. For data augmentation,input im
 </tr> 
 </table>
 
-
-
-## Training and Inference
-Please follow [INSTALL.md](https://github.com/facebookresearch/detectron2/blob/master/INSTALL.md) to install detectron2. 
-
-To train a model with 8 gpus, please run
-```shell
-python train_net.py  --num-gpus 8 --config-file your_config.yaml
-```
-
-For inference
-```shell
-python train_net.py  \
-                --config-file your_config.yaml
-                --eval-only MODEL.WEIGHTS /path/to/checkpoint_file
-```
-
-For the inference demo, please see [GETTING_STARTED.md](./GETTING_STARTED.md).
 
 ## Reference
 
