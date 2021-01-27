@@ -177,7 +177,7 @@ All models are trained along with FPN and SyncBN. For data augmentation,input im
 
 
 ## Training and Inference
-Please follow [INSTALL.md](./INSTALL.md) to install detecron2. 
+Please follow [INSTALL.md](https://github.com/facebookresearch/detectron2/blob/master/INSTALL.md) to install detectron2. 
 
 To train a model with 8 gpus, please run
 ```shell
