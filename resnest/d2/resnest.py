@@ -13,13 +13,13 @@ from detectron2.layers import (
     get_norm,
 )
 
-from detectron2.modeling.backbone import Backbone
-from detectron2.modeling.build import BACKBONE_REGISTRY
+from detectron2.modeling.backbone import Backbone, FPN, BACKBONE_REGISTRY
+from detectron2.modeling.backbone.fpn import LastLevelMaxPool
 
 __all__ = [
     "ResNeSt",
     "build_resnest_backbone",
-    "build_resnet_fpn_backbone",
+    "build_resnest_fpn_backbone",
 ]
 
 
@@ -713,7 +713,7 @@ def build_resnest_backbone(cfg, input_shape):
     return ResNeSt(stem, stages, out_features=out_features)
 
 @BACKBONE_REGISTRY.register()
-def build_resnet_fpn_backbone(cfg, input_shape: ShapeSpec):
+def build_resnest_fpn_backbone(cfg, input_shape: ShapeSpec):
     """
     Args:
         cfg: a detectron2 CfgNode
