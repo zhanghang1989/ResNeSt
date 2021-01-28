@@ -7,11 +7,36 @@
 ##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 """ResNeSt implemented in Gluon."""
 
-__all__ = ['resnest50', 'resnest101',
+__all__ = ['resnest14', 'resnest26', 
+           'resnest50', 'resnest101',
            'resnest200', 'resnest269']
 
 from .resnet import ResNet, Bottleneck
 from mxnet import cpu
+
+def resnest14(pretrained=False, root='~/.mxnet/models', ctx=cpu(0), **kwargs):
+    model = ResNet(Bottleneck, [1, 1, 1, 1],
+                      radix=2, cardinality=1, bottleneck_width=64,
+                      deep_stem=True, avg_down=True,
+                      avd=True, avd_first=False,
+                      use_splat=True, dropblock_prob=0.0,
+                      name_prefix='resnest_', **kwargs)
+    if pretrained:
+        from .model_store import get_model_file
+        model.load_parameters(get_model_file('resnest14', root=root), ctx=ctx)
+    return model
+
+def resnest26(pretrained=False, root='~/.mxnet/models', ctx=cpu(0), **kwargs):
+    model = ResNet(Bottleneck, [2, 2, 2, 2],
+                      radix=2, cardinality=1, bottleneck_width=64,
+                      deep_stem=True, avg_down=True,
+                      avd=True, avd_first=False,
+                      use_splat=True, dropblock_prob=0.1,
+                      name_prefix='resnest_', **kwargs)
+    if pretrained:
+        from .model_store import get_model_file
+        model.load_parameters(get_model_file('resnest26', root=root), ctx=ctx)
+    return model
 
 def resnest50(pretrained=False, root='~/.mxnet/models', ctx=cpu(0), **kwargs):
     model = ResNet(Bottleneck, [3, 4, 6, 3],
