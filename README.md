@@ -22,7 +22,7 @@ Split-Attention Network, A New ResNet Variant. It significantly boosts the perfo
 ### Table of Contents
 0. [Pretrained Models](#pretrained-models)
 0. [Transfer Learning Models](#transfer-learning-models)
-0. [Verify Backbone Models](#verify-backbone-models)
+0. [Verify  ImageNet Results](#verify-imagenet-results)
 0. [How to Train](#how-to-train)
 0. [Reference](#reference)
 
@@ -87,229 +87,21 @@ net = resnest50(pretrained=True)
 
 ## Transfer Learning Models
 
+### Detectron2
+
+We provide a wrapper for training Detectron2 models with ResNeSt backbone at [d2](./d2). Training configs and pretrained models are released. See details in [d2](./d2).
+
 ### MMDetection
 
 The ResNeSt backbone has been adopted by [MMDetection](https://github.com/open-mmlab/mmdetection/tree/master/configs/resnest).
 
-### Detectron Models
-
-Training code and pretrained models are released at our [Detectron2 Fork](https://github.com/zhanghang1989/detectron2-ResNeSt).
-
-#### Object Detection on MS-COCO validation set
-
-
-<table class="tg">
-  <tr>
-    <th class="tg-0pky">Method</th>
-    <th class="tg-0pky">Backbone</th>
-    <th class="tg-0pky">mAP%</th>
-  </tr>
-  <tr>
-    <td rowspan="4" class="tg-0pky">Faster R-CNN</td>
-    <td class="tg-0pky">ResNet-50</td>
-    <td class="tg-0pky">39.25</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNet-101</td>
-    <td class="tg-0lax">41.37</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNeSt-50 (<span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>42.33</b></td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNeSt-101 (<span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>44.72</b></td>
-  </tr>
-  <tr>
-    <td rowspan="5" class="tg-0lax">Cascade R-CNN</td>
-    <td class="tg-0lax">ResNet-50</td>
-    <td class="tg-0lax">42.52</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNet-101</td>
-    <td class="tg-0lax">44.03</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNeSt-50 (<span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>45.41</b></td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNeSt-101 (<span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>47.50</b></td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNeSt-200 (<span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>49.03</b></td>
-  </tr>
-</table>
-
-#### Instance Segmentation
-
-
-<table class="tg">
-  <tr>
-    <th class="tg-0pky">Method</th>
-    <th class="tg-0pky">Backbone</th>
-    <th class="tg-0pky">bbox</th>
-    <th class="tg-0lax">mask</th>
-  </tr>
-  <tr>
-    <td rowspan="4" class="tg-0pky">Mask R-CNN</td>
-    <td class="tg-0pky">ResNet-50</td>
-    <td class="tg-0pky">39.97</td>
-    <td class="tg-0lax">36.05</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNet-101</td>
-    <td class="tg-0lax">41.78</td>
-    <td class="tg-0lax">37.51</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNeSt-50 (<span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>42.81</b></td>
-    <td class="tg-0lax"><b>38.14</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNeSt-101 (<span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>45.75</b></td>
-    <td class="tg-0lax"><b>40.65</b></td>
-  </tr>
-  <tr>
-    <td rowspan="7" class="tg-0lax">Cascade R-CNN</td>
-    <td class="tg-0lax">ResNet-50</td>
-    <td class="tg-0lax">43.06</td>
-    <td class="tg-0lax">37.19</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNet-101</td>
-    <td class="tg-0lax">44.79</td>
-    <td class="tg-0lax">38.52</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNeSt-50 (<span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>46.19</b></td>
-    <td class="tg-0lax"><b>39.55</b></td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNeSt-101 (<span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>48.30</b></td>
-    <td class="tg-0lax"><b>41.56</b></td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNeSt-200 (w/ tricks <span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>50.54</b></td>
-    <td class="tg-0lax"><b>44.21</b></td>
-  </tr>
-   <tr>
-    <td rowspan="2" class="tg-0lax">ResNeSt-200-dcn (w/ tricks <span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>50.91</b></td>
-    <td class="tg-0lax"><b>44.50</b></td>
-  </tr>
-   <tr>
-    <td class="tg-0lax"><b>53.30*</b></td>
-    <td class="tg-0lax"><b>47.10*</b></td>
-  </tr>
-</table>
-
-All of results are reported on COCO-2017 validation dataset. The values with * demonstrate the mutli-scale testing performance on the test-dev2019.
-
-#### Panoptic Segmentation
-<table class="tg">
-  <tr>
-    <th class="tg-0pky">Backbone</th>
-    <th class="tg-0pky">bbox</th>
-    <th class="tg-0lax">mask</th>
-    <th class="tg-0lax">PQ</th>
-  </tr>
-  <tr>
-    <td class="tg-0pky">ResNeSt-200</td>
-    <td class="tg-0pky">51.00</td>
-    <td class="tg-0lax">43.68</td>
-    <td class="tg-0lax">47.90</td>
-   </tr> 
-</table>
-
 ### Semantic Segmentation
 
 - PyTorch models and training: Please visit [PyTorch Encoding Toolkit](https://hangzhang.org/PyTorch-Encoding/model_zoo/segmentation.html).
-- Training with Gluon: Please visit [GluonCV Toolkit](https://gluon-cv.mxnet.io/model_zoo/segmentation.html#ade20k-dataset).
-
-#### Results on ADE20K
-
-<table class="tg">
-  <tr>
-    <th class="tg-cly1">Method</th>
-    <th class="tg-cly1">Backbone</th>
-    <th class="tg-cly1">pixAcc%</th>
-    <th class="tg-cly1">mIoU%</th>
-  </tr>
-  <tr>
-    <td rowspan="6" class="tg-cly1">Deeplab-V3<br></td>
-    <td class="tg-cly1">ResNet-50</td>
-    <td class="tg-cly1">80.39</td>
-    <td class="tg-cly1">42.1</td>
-  </tr>
-  <tr>
-    <td class="tg-cly1">ResNet-101</td>
-    <td class="tg-cly1">81.11</b></td>
-    <td class="tg-cly1">44.14</b></td>
-  </tr>
-  <tr>
-    <td class="tg-cly1">ResNeSt-50 (<span style="color:red">ours</span>)</td>
-    <td class="tg-cly1"><b>81.17</b></td>
-    <td class="tg-cly1"><b>45.12</b></td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNeSt-101 (<span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>82.07</td>
-    <td class="tg-0lax"><b>46.91</b></td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNeSt-200 (<span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>82.45</td>
-    <td class="tg-0lax"><b>48.36</b></td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNeSt-269 (<span style="color:red">ours</span>)</td>
-    <td class="tg-0lax"><b>82.62</td>
-    <td class="tg-0lax"><b>47.60</b></td>
-  </tr>
-</table>
-
-#### Results on Cityscapes
-
-<table class="tg">
-  <tr>
-    <th class="tg-cly1">Method</th>
-    <th class="tg-cly1">Backbone</th>
-    <th class="tg-cly1">Split</th>
-    <th class="tg-cly1">w Mapillary</th>
-    <th class="tg-cly1">mIoU%</th>
-  </tr>
-  <tr>
-    <td rowspan="3" class="tg-cly1">Deeplab-V3+<br></td>
-    <td class="tg-cly1">ResNeSt-200 (<span style="color:red">ours</span>)</td>
-    <td class="tg-cly1">Validation</td>
-    <td class="tg-cly1">no</td>
-    <td class="tg-cly1">82.7</td>
-  </tr>
-  <tr>
-    <td class="tg-cly1">ResNeSt-200 (<span style="color:red">ours</span>)</td>
-    <td class="tg-cly1">Validation</td>
-    <td class="tg-cly1">yes</td>
-    <td class="tg-cly1"><b>83.8<b></td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">ResNeSt-200 (<span style="color:red">ours</span>)</td>
-    <td class="tg-0lax">Test</td>
-    <td class="tg-cly1">yes</td>
-    <td class="tg-0lax"><b>83.3<b></td>
-  </tr>
-</table>
+- Gluon models and training: Please visit [GluonCV Toolkit](https://gluon-cv.mxnet.io/model_zoo/segmentation.html#ade20k-dataset).
 
 
-## Verify Backbone Models:
+## Verify ImageNet Results:
 
 **Note:** the inference speed reported in the paper are tested using Gluon implementation with RecordIO data.
 
