@@ -5,7 +5,7 @@ import torch.nn.functional as F
 from torch.nn import Conv2d, Module, Linear, BatchNorm2d, ReLU
 from torch.nn.modules.utils import _pair
 
-from resnest.torch..models.splat import SplAtConv2d
+from resnest.torch.models.splat import SplAtConv2d
 
 class RadixMajorNaiveImp(Module):
     """Split-Attention Conv2d
