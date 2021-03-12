@@ -1,4 +1,2 @@
 MODEL:
   NAME: 'resnet50'
-DATA:
-  ROOT: '/data/local/packages/ai-group.imagenet-full-size/prod/imagenet_full_size'
