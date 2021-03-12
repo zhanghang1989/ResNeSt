@@ -10,10 +10,10 @@ from torchvision.transforms import *
 from .transforms import *
 from fvcore.common.registry import Registry
 
-RESNEST_TRANSFORMS_REGISTRY = Registry('RESNEST_DATASETS')
+RESNEST_TRANSFORMS_REGISTRY = Registry('RESNEST_TRANSFORMS')
 
 def get_transform(dataset_name):
-    return RESNEST_TRANSFORMS_REGISTRY.get(dataset_name.lower)
+    return RESNEST_TRANSFORMS_REGISTRY.get(dataset_name.lower())
 
 @RESNEST_TRANSFORMS_REGISTRY.register()
 def imagenet(base_size=None, crop_size=224, rand_aug=False):

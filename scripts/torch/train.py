@@ -64,7 +64,7 @@ def main():
     cfg.merge_from_file(args.config_file)
 
     cfg.OPTIMIZER.LR = cfg.OPTIMIZER.LR * args.world_size
-    mp.spawn(main_worker, nprocs=ngpus_per_node, args=(ngpus_per_node, args))
+    mp.spawn(main_worker, nprocs=ngpus_per_node, args=(ngpus_per_node, args, cfg))
 
 # global variable
 best_pred = 0.0
@@ -91,13 +91,13 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
     torch.cuda.manual_seed(cfg.SEED)
 
     # init dataloader
-    transform_train, transform_val = get_transform(cfg.DATASET.NAME)(
+    transform_train, transform_val = get_transform(cfg.DATA.DATASET)(
             cfg.DATA.BASE_SIZE, cfg.DATA.CROP_SIZE, cfg.DATA.RAND_AUG)
-    trainset = get_dataset(cfg.DATASET.NAME)(root=cfg.DATA.ROOT,
+    trainset = get_dataset(cfg.DATA.DATASET)(root=cfg.DATA.ROOT,
                                              transform=transform_train,
                                              train=True,
                                              download=True)
-    valset = get_dataset(cfg.DATASET.NAME)(root=cfg.DATA.ROOT,
+    valset = get_dataset(cfg.DATA.DATASET)(root=cfg.DATA.ROOT,
                                            transform=transform_val,
                                            train=False,
                                            download=True)
@@ -116,13 +116,13 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
     
     # init the model
     model_kwargs = {}
-    if args.final_drop > 0.0:
-        model_kwargs['final_drop'] = args.final_drop
+    if cfg.MODEL.FINAL_DROP > 0.0:
+        model_kwargs['final_drop'] = cfg.MODEL.FINAL_DROP
 
-    if args.last_gamma:
+    if cfg.TRAINING.LAST_GAMMA:
         model_kwargs['last_gamma'] = True
 
-    model = get_model(args.model)(**model_kwargs)
+    model = get_model(cfg.MODEL.NAME)(**model_kwargs)
 
     if args.gpu == 0:
         print(model)
@@ -160,7 +160,8 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
             if args.gpu == 0:
                 print("=> loading checkpoint '{args.resume}'")
             checkpoint = torch.load(args.resume)
-            cfg.TRAINING.START_EPOCHS = checkpoint['epoch'] + 1 if cfg.TRAINING.START_EPOCHS == 0 else args.start_epoch
+            cfg.TRAINING.START_EPOCHS = checkpoint['epoch'] + 1 if cfg.TRAINING.START_EPOCHS == 0 \
+                    else cfg.TRAINING.START_EPOCHS
             best_pred = checkpoint['best_pred']
             acclist_train = checkpoint['acclist_train']
             acclist_val = checkpoint['acclist_val']

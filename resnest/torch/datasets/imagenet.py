@@ -22,5 +22,4 @@ class ImageNet(datasets.ImageFolder):
                  target_transform=None, train=True, **kwargs):
         split='train' if train == True else 'val'
         root = os.path.join(root, split)
-        super(ImageNetDataset, self).__init__(
-            root, transform, target_transform)
+        super().__init__(root, transform, target_transform)
