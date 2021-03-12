@@ -11,9 +11,11 @@
 import os
 import math
 import shutil
+import functools
 import threading
 import numpy as np
 import torch
+from ..utils import mkdir
 
 __all__ = ['accuracy', 'AverageMeter', 'LR_Scheduler',
            'torch_dist_sum', 'MixUpWrapper', 'save_checkpoint']
@@ -72,8 +74,8 @@ def torch_dist_sum(gpu, *args):
     return tensor_args
 
 def get_rank():
-    if dist.is_initialized():
-        rank = dist.get_rank()
+    if torch.distributed.is_initialized():
+        rank = torch.distributed.get_rank()
     else:
         rank = 0
     return rank
@@ -109,11 +111,17 @@ class LR_Scheduler(object):
         iters_per_epoch: number of iterations per epoch
     """
     def __init__(self, mode, base_lr, num_epochs, iters_per_epoch=0,
-                 lr_step=0, warmup_epochs=0, quiet=False):
+                 lr_step=0, warmup_epochs=0, quiet=False,
+                 logger=None):
         self.mode = mode
         self.quiet = quiet
+        self.logger = logger
         if not quiet:
-            master_only_print('Using {} LR scheduler with warm-up epochs of {}!'.format(self.mode, warmup_epochs))
+            msg = 'Using {} LR scheduler with warm-up epochs of {}!'.format(self.mode, warmup_epochs)
+            if self.logger:
+                self.logger.info(msg)
+            else:
+                master_only_print()
         if mode == 'step':
             assert lr_step
         self.base_lr = base_lr
@@ -140,8 +148,12 @@ class LR_Scheduler(object):
             raise NotImplementedError
         if epoch > self.epoch and (epoch == 0 or best_pred > 0.0):
             if not self.quiet:
-                master_only_print('\n=>Epoch %i, learning rate = %.4f, \
-                    previous best = %.4f' % (epoch, lr, best_pred))
+                msg = '\n=>Epoch %i, learning rate = %.4f, \
+                    previous best = %.4f' % (epoch, lr, best_pred)
+                if self.logger:
+                    self.logger.info(msg)
+                else:
+                    master_only_print()
             self.epoch = epoch
         assert lr >= 0
         self._adjust_learning_rate(optimizer, lr)
@@ -184,8 +196,7 @@ class MixUpWrapper(object):
 @master_only
 def save_checkpoint(state, directory, is_best, filename='checkpoint.pth'):
     """Saves checkpoint to disk"""
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    mkdir(directory)
     filename = directory + filename
     torch.save(state, filename)
     if is_best:

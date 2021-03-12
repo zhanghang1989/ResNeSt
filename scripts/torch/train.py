@@ -16,6 +16,7 @@ import torch.distributed as dist
 import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel
 
+from resnest.utils import mkdir
 from resnest.torch.config import get_cfg
 from resnest.torch.models.build import get_model
 from resnest.torch.datasets import get_dataset
@@ -25,6 +26,7 @@ from resnest.torch.utils import (save_checkpoint, accuracy,
         AverageMeter, LR_Scheduler, torch_dist_sum)
 
 logger = logging.getLogger('train')
+logger.setLevel(logging.INFO)
 
 class Options():
     def __init__(self):
@@ -84,6 +86,10 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
                             rank=args.rank)
     torch.cuda.set_device(args.gpu)
     if args.gpu == 0:
+        mkdir(args.outdir)
+        fh = logging.FileHandler(os.path.join(args.outdir, 'log.txt'))
+        fh.setLevel(logging.INFO)
+        logger.addHandler(fh)
         logger.info(args)
 
     # init the global
