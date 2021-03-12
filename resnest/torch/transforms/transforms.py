@@ -9,7 +9,7 @@ import math
 import random
 
 from PIL import Image
-from torchvision.transforms import Resize
+from torchvision.transforms import Resize, InterpolationMode
 
 __all__ = ['Lighting', 'ERandomCrop', 'ECenterCrop']
 
@@ -49,7 +49,8 @@ class ERandomCrop:
         self.area_range = area_range
         self.max_attempts = max_attempts
         self._fallback = ECenterCrop(imgsize)
-        self.resize_method = Resize((imgsize, imgsize), interpolation=Image.BICUBIC)
+        self.resize_method = Resize((imgsize, imgsize),
+                                    interpolation=InterpolationMode.BILINEAR)
 
     def __call__(self, img):
         original_width, original_height = img.size
@@ -105,7 +106,8 @@ class ECenterCrop:
     """
     def __init__(self, imgsize):
         self.imgsize = imgsize
-        self.resize_method = Resize((imgsize, imgsize), interpolation=Image.BICUBIC)
+        self.resize_method = Resize((imgsize, imgsize),
+                                    interpolation=InterpolationMode.BILINEAR)
 
     def __call__(self, img):
         image_width, image_height = img.size
