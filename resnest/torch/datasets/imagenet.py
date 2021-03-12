@@ -18,10 +18,9 @@ from .build import RESNEST_DATASETS_REGISTRY
 
 @RESNEST_DATASETS_REGISTRY.register()
 class ImageNet(datasets.ImageFolder):
-    BASE_DIR = "ILSVRC2012"
-    def __init__(self, root=os.path.expanduser('~/.encoding/data'), transform=None,
+    def __init__(self, root=os.path.expanduser('~/.encoding/data/ILSVRC2012'), transform=None,
                  target_transform=None, train=True, **kwargs):
         split='train' if train == True else 'val'
-        root = os.path.join(root, self.BASE_DIR, split)
+        root = os.path.join(root, split)
         super(ImageNetDataset, self).__init__(
             root, transform, target_transform)

@@ -58,7 +58,12 @@ def main():
     args = Options().parse()
     ngpus_per_node = torch.cuda.device_count()
     args.world_size = ngpus_per_node * args.world_size
-    args.lr = args.lr * args.world_size
+
+    # load config
+    cfg = get_cfg()
+    cfg.merge_from_file(args.config_file)
+
+    cfg.OPTIMIZER.LR = cfg.OPTIMIZER.LR * args.world_size
     mp.spawn(main_worker, nprocs=ngpus_per_node, args=(ngpus_per_node, args))
 
 # global variable
@@ -66,7 +71,7 @@ best_pred = 0.0
 acclist_train = []
 acclist_val = []
 
-def main_worker(gpu, ngpus_per_node, args):
+def main_worker(gpu, ngpus_per_node, args, cfg):
     args.gpu = gpu
     args.rank = args.rank * ngpus_per_node + gpu
     print(f'rank: {args.rank} / {args.world_size}')
@@ -78,10 +83,6 @@ def main_worker(gpu, ngpus_per_node, args):
     if args.gpu == 0:
         print(args)
 
-    # load config
-    cfg = get_cfg()
-    cfg.merge_from_file(args.config_file)
-
     # init the global
     global best_pred, acclist_train, acclist_val
 
@@ -92,10 +93,14 @@ def main_worker(gpu, ngpus_per_node, args):
     # init dataloader
     transform_train, transform_val = get_transform(cfg.DATASET.NAME)(
             cfg.DATA.BASE_SIZE, cfg.DATA.CROP_SIZE, cfg.DATA.RAND_AUG)
-    trainset = get_dataset(cfg.DATASET.NAME)(root=os.path.expanduser('~/.encoding/data'),
-                                             transform=transform_train, train=True, download=True)
-    valset = get_dataset(cfg.DATASET.NAME)(root=os.path.expanduser('~/.encoding/data'),
-                                           transform=transform_val, train=False, download=True)
+    trainset = get_dataset(cfg.DATASET.NAME)(root=cfg.DATA.ROOT,
+                                             transform=transform_train,
+                                             train=True,
+                                             download=True)
+    valset = get_dataset(cfg.DATASET.NAME)(root=cfg.DATA.ROOT,
+                                           transform=transform_val,
+                                           train=False,
+                                           download=True)
 
     train_sampler = torch.utils.data.distributed.DistributedSampler(trainset)
     train_loader = torch.utils.data.DataLoader(

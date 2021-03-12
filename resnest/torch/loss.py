@@ -2,7 +2,7 @@ import torch
 import torch.nn.functional as F
 import torch.nn as nn
 from torch.autograd import Variable
-from resnest.torch.utils MixUpWrapper
+from resnest.torch.utils import MixUpWrapper
 
 __all__ = ['LabelSmoothing', 'NLLMultiLabelSmooth', 'get_criterion']
 

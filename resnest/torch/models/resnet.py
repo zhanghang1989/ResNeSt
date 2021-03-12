@@ -10,7 +10,6 @@ import math
 import torch
 import torch.nn as nn
 
-from ...utils import short_hash
 from .splat import SplAtConv2d
 from .build import RESNEST_MODELS_REGISTRY
 
@@ -20,6 +19,12 @@ _url_format = 'https://s3.us-west-1.wasabisys.com/resnest/torch/{}-{}.pth'
 
 _model_sha256 = {name: checksum for checksum, name in [
     ]}
+
+
+def short_hash(name):
+    if name not in _model_sha256:
+        raise ValueError('Pretrained model for {name} is not available.'.format(name=name))
+    return _model_sha256[name][:8]
 
 resnest_model_urls = {name: _url_format.format(name, short_hash(name)) for
     name in _model_sha256.keys()

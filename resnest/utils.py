@@ -17,7 +17,7 @@ from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['unzip', 'download', 'mkdir', 'check_sha1', 'short_hash',
+__all__ = ['unzip', 'download', 'mkdir', 'check_sha1',
            'raise_num_file']
 
 def unzip(zip_file_path, root=os.path.expanduser('./')):
@@ -118,11 +118,6 @@ def check_sha1(filename, sha1_hash):
             sha1.update(data)
 
     return sha1.hexdigest() == sha1_hash
-
-def short_hash(name):
-    if name not in _model_sha256:
-        raise ValueError('Pretrained model for {name} is not available.'.format(name=name))
-    return _model_sha256[name][:8]
 
 
 def mkdir(path):

@@ -1,3 +1,4 @@
+import os
 from fvcore.common.config import CfgNode as CN
 
 _C = CN()
@@ -7,6 +8,7 @@ _C.SEED = 1
 # data related
 _C.DATA = CN()
 _C.DATA.DATASET = 'ImageNet'
+_C.DATA.ROOT = os.path.expanduser('~/.encoding/data/ILSVRC2012')
 _C.DATA.BASE_SIZE = None
 _C.DATA.CROP_SIZE = 224
 _C.DATA.LABEL_SMOOTHING = 0.0
@@ -38,5 +40,5 @@ _C.OPTIMIZER.WEIGHT_DECAY = 1e-4
 _C.OPTIMIZER.DISABLE_BN_WD = False
 _C.OPTIMIZER.WARMUP_EPOCHS = 0
 
-def get_cfg() -> CfgNode:
+def get_cfg() -> CN:
     return _C.clone()

@@ -8,7 +8,6 @@
 """ResNeSt models"""
 
 import torch
-from ...utils import short_hash
 from .resnet import ResNet, Bottleneck
 
 __all__ = ['resnest50', 'resnest101', 'resnest200', 'resnest269']
@@ -22,6 +21,11 @@ _model_sha256 = {name: checksum for checksum, name in [
     ('75117900', 'resnest200'),
     ('0cc87c48', 'resnest269'),
     ]}
+
+def short_hash(name):
+    if name not in _model_sha256:
+        raise ValueError('Pretrained model for {name} is not available.'.format(name=name))
+    return _model_sha256[name][:8]
 
 resnest_model_urls = {name: _url_format.format(name, short_hash(name)) for
     name in _model_sha256.keys()
