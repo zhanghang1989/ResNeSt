@@ -40,6 +40,7 @@ requirements = [
     'Pillow',
     'scipy',
     'requests',
+    'fvcore',
 ]
 
 if __name__ == '__main__':
