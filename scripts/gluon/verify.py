@@ -117,7 +117,7 @@ if __name__ == '__main__':
     resize = int(math.ceil(input_size/crop_ratio))
 
     if input_size >= 320:
-        from resnest.transforms import ECenterCrop
+        from resnest.gluon.transforms import ECenterCrop
         from resnest.gluon.data_utils import ToPIL, ToNDArray
         transform_test = transforms.Compose([
             ToPIL(),

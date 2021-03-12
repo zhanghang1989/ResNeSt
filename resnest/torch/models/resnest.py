@@ -8,9 +8,11 @@
 """ResNeSt models"""
 
 import torch
+from ...utils import short_hash
 from .resnet import ResNet, Bottleneck
 
 __all__ = ['resnest50', 'resnest101', 'resnest200', 'resnest269']
+from .build import RESNEST_MODELS_REGISTRY
 
 _url_format = 'https://s3.us-west-1.wasabisys.com/resnest/torch/{}-{}.pth'
 
@@ -21,15 +23,11 @@ _model_sha256 = {name: checksum for checksum, name in [
     ('0cc87c48', 'resnest269'),
     ]}
 
-def short_hash(name):
-    if name not in _model_sha256:
-        raise ValueError('Pretrained model for {name} is not available.'.format(name=name))
-    return _model_sha256[name][:8]
-
 resnest_model_urls = {name: _url_format.format(name, short_hash(name)) for
     name in _model_sha256.keys()
 }
 
+@RESNEST_MODELS_REGISTRY.register()
 def resnest50(pretrained=False, root='~/.encoding/models', **kwargs):
     model = ResNet(Bottleneck, [3, 4, 6, 3],
                    radix=2, groups=1, bottleneck_width=64,
@@ -40,6 +38,7 @@ def resnest50(pretrained=False, root='~/.encoding/models', **kwargs):
             resnest_model_urls['resnest50'], progress=True, check_hash=True))
     return model
 
+@RESNEST_MODELS_REGISTRY.register()
 def resnest101(pretrained=False, root='~/.encoding/models', **kwargs):
     model = ResNet(Bottleneck, [3, 4, 23, 3],
                    radix=2, groups=1, bottleneck_width=64,
@@ -50,6 +49,7 @@ def resnest101(pretrained=False, root='~/.encoding/models', **kwargs):
             resnest_model_urls['resnest101'], progress=True, check_hash=True))
     return model
 
+@RESNEST_MODELS_REGISTRY.register()
 def resnest200(pretrained=False, root='~/.encoding/models', **kwargs):
     model = ResNet(Bottleneck, [3, 24, 36, 3],
                    radix=2, groups=1, bottleneck_width=64,
@@ -60,6 +60,7 @@ def resnest200(pretrained=False, root='~/.encoding/models', **kwargs):
             resnest_model_urls['resnest200'], progress=True, check_hash=True))
     return model
 
+@RESNEST_MODELS_REGISTRY.register()
 def resnest269(pretrained=False, root='~/.encoding/models', **kwargs):
     model = ResNet(Bottleneck, [3, 30, 48, 8],
                    radix=2, groups=1, bottleneck_width=64,
