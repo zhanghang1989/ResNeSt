@@ -197,8 +197,8 @@ class MixUpWrapper(object):
 def save_checkpoint(state, directory, is_best, filename='checkpoint.pth'):
     """Saves checkpoint to disk"""
     mkdir(directory)
-    filename = directory + filename
+    filename = os.path.join(directory, filename)
     torch.save(state, filename)
     if is_best:
-        shutil.copyfile(filename, directory + 'model_best.pth')
+        shutil.copyfile(filename, os.path.join(directory, 'model_best.pth'))
 
