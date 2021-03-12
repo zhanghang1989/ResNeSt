@@ -16,20 +16,7 @@ import numpy as np
 import torch
 
 __all__ = ['accuracy', 'AverageMeter', 'LR_Scheduler',
-           'torch_dist_sum', 'MixUpWrapper']
-
-def save_checkpoint(state, args, is_best, filename='checkpoint.pth.tar'):
-    """Saves checkpoint to disk"""
-    if hasattr(args, 'backbone'):
-        directory = "runs/%s/%s/%s/%s/"%(args.dataset, args.model, args.backbone, args.checkname)
-    else:
-        directory = "runs/%s/%s/%s/"%(args.dataset, args.model, args.checkname)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-    filename = directory + filename
-    torch.save(state, filename)
-    if is_best:
-        shutil.copyfile(filename, directory + 'model_best.pth.tar')
+           'torch_dist_sum', 'MixUpWrapper', 'save_checkpoint']
 
 def accuracy(output, target, topk=(1,)):
     """Computes the accuracy over the k top predictions for the specified values of k"""
@@ -43,7 +30,7 @@ def accuracy(output, target, topk=(1,)):
 
         res = []
         for k in topk:
-            correct_k = correct[:k].view(-1).float().sum(0, keepdim=True)
+            correct_k = correct[:k].reshape(-1).float().sum(0, keepdim=True)
             res.append(correct_k.mul_(100.0 / batch_size))
         return res
 
@@ -84,6 +71,26 @@ def torch_dist_sum(gpu, *args):
         res.wait()
     return tensor_args
 
+def get_rank():
+    if dist.is_initialized():
+        rank = dist.get_rank()
+    else:
+        rank = 0
+    return rank
+
+def master_only(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        if get_rank() == 0:
+            return func(*args, **kwargs)
+        else:
+            return None
+    return wrapper
+
+@master_only
+def master_only_print(*args):
+    """master-only print"""
+    print(*args)
 
 class LR_Scheduler(object):
     """Learning Rate Scheduler
@@ -106,7 +113,7 @@ class LR_Scheduler(object):
         self.mode = mode
         self.quiet = quiet
         if not quiet:
-            print('Using {} LR scheduler with warm-up epochs of {}!'.format(self.mode, warmup_epochs))
+            master_only_print('Using {} LR scheduler with warm-up epochs of {}!'.format(self.mode, warmup_epochs))
         if mode == 'step':
             assert lr_step
         self.base_lr = base_lr
@@ -133,7 +140,7 @@ class LR_Scheduler(object):
             raise NotImplementedError
         if epoch > self.epoch and (epoch == 0 or best_pred > 0.0):
             if not self.quiet:
-                print('\n=>Epoch %i, learning rate = %.4f, \
+                master_only_print('\n=>Epoch %i, learning rate = %.4f, \
                     previous best = %.4f' % (epoch, lr, best_pred))
             self.epoch = epoch
         assert lr >= 0
@@ -173,3 +180,14 @@ class MixUpWrapper(object):
 
     def __iter__(self):
         return self.mixup_loader(self.dataloader)
+
+@master_only
+def save_checkpoint(state, directory, is_best, filename='checkpoint.pth'):
+    """Saves checkpoint to disk"""
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    filename = directory + filename
+    torch.save(state, filename)
+    if is_best:
+        shutil.copyfile(filename, directory + 'model_best.pth')
+

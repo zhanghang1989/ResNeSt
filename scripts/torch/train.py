@@ -8,6 +8,7 @@
 
 import os
 import time
+import logging
 import argparse
 
 import torch
@@ -23,17 +24,19 @@ from resnest.torch.loss import get_criterion
 from resnest.torch.utils import (save_checkpoint, accuracy,
         AverageMeter, LR_Scheduler, torch_dist_sum)
 
+logger = logging.getLogger('train')
+
 class Options():
     def __init__(self):
         # data settings
         parser = argparse.ArgumentParser(description='ResNeSt Training')
         parser.add_argument('--config-file', type=str, default=None,
                             help='training configs')
+        parser.add_argument('--outdir', type=str, default='output',
+                            help='output directory')
         # checking point
         parser.add_argument('--resume', type=str, default=None,
                             help='put the path to resuming file if needed')
-        parser.add_argument('--checkname', type=str, default='default',
-                            help='set the checkpoint name')
         # distributed
         parser.add_argument('--world-size', default=1, type=int,
                             help='number of nodes for distributed training')
@@ -74,14 +77,14 @@ acclist_val = []
 def main_worker(gpu, ngpus_per_node, args, cfg):
     args.gpu = gpu
     args.rank = args.rank * ngpus_per_node + gpu
-    print(f'rank: {args.rank} / {args.world_size}')
+    logger.info(f'rank: {args.rank} / {args.world_size}')
     dist.init_process_group(backend=args.dist_backend,
                             init_method=args.dist_url,
                             world_size=args.world_size,
                             rank=args.rank)
     torch.cuda.set_device(args.gpu)
     if args.gpu == 0:
-        print(args)
+        logger.info(args)
 
     # init the global
     global best_pred, acclist_train, acclist_val
@@ -125,7 +128,7 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
     model = get_model(cfg.MODEL.NAME)(**model_kwargs)
 
     if args.gpu == 0:
-        print(model)
+        logger.info(model)
 
     criterion, train_loader = get_criterion(cfg, train_loader, args.gpu)
 
@@ -142,8 +145,8 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
         bn_params = [v for n, v in param_dict.items() if ('bn' in n or 'bias' in n)]
         rest_params = [v for n, v in param_dict.items() if not ('bn' in n or 'bias' in n)]
         if args.gpu == 0:
-            print(" Weight decay NOT applied to BN parameters ")
-            print(f'len(parameters): {len(list(model.parameters()))} = {len(bn_params)} + {len(rest_params)}')
+            logger.info(" Weight decay NOT applied to BN parameters ")
+            logger.info(f'len(parameters): {len(list(model.parameters()))} = {len(bn_params)} + {len(rest_params)}')
         optimizer = torch.optim.SGD([{'params': bn_params, 'weight_decay': 0 },
                                      {'params': rest_params, 'weight_decay': cfg.OPTIMIZER.WEIGHT_DECAY}],
                                     lr=cfg.OPTIMIZER.LR,
@@ -158,7 +161,7 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
     if args.resume is not None:
         if os.path.isfile(args.resume):
             if args.gpu == 0:
-                print("=> loading checkpoint '{args.resume}'")
+                logger.info("=> loading checkpoint '{args.resume}'")
             checkpoint = torch.load(args.resume)
             cfg.TRAINING.START_EPOCHS = checkpoint['epoch'] + 1 if cfg.TRAINING.START_EPOCHS == 0 \
                     else cfg.TRAINING.START_EPOCHS
@@ -168,9 +171,10 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
             model.module.load_state_dict(checkpoint['state_dict'])
             optimizer.load_state_dict(checkpoint['optimizer'])
             if args.gpu == 0:
-                print(f"=> loaded checkpoint '{args.resume}' (epoch {checkpoint['epoch']})")
+                logger.info(f"=> loaded checkpoint '{args.resume}' (epoch {checkpoint['epoch']})")
         else:
             raise RuntimeError (f"=> no resume checkpoint found at '{args.resume}'")
+
     scheduler = LR_Scheduler(cfg.OPTIMIZER.LR_SCHEDULER,
                              base_lr=cfg.OPTIMIZER.LR,
                              num_epochs=cfg.TRAINING.EPOCHS,
@@ -199,9 +203,9 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
             losses.update(loss.item(), data.size(0))
             if batch_idx % 100 == 0 and args.gpu == 0:
                 if cfg.DATA.MIXUP:
-                    print('Batch: %d| Loss: %.3f'%(batch_idx, losses.avg))
+                    logger.info('Batch: %d| Loss: %.3f'%(batch_idx, losses.avg))
                 else:
-                    print('Batch: %d| Loss: %.3f | Top1: %.3f'%(batch_idx, losses.avg, top1.avg))
+                    logger.info('Batch: %d| Loss: %.3f | Top1: %.3f'%(batch_idx, losses.avg, top1.avg))
 
         acclist_train += [top1.avg]
 
@@ -225,7 +229,7 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
         if args.gpu == 0:
             top1_acc = sum(sum1) / sum(cnt1)
             top5_acc = sum(sum5) / sum(cnt5)
-            print('Validation: Top1: %.3f | Top5: %.3f'%(top1_acc, top5_acc))
+            logger.info('Validation: Top1: %.3f | Top5: %.3f'%(top1_acc, top5_acc))
             if args.eval_only:
                 return
 
@@ -242,9 +246,9 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
                     'acclist_train':acclist_train,
                     'acclist_val':acclist_val,
                 },
-                args=args,
-                cfg=cfg,
-                is_best=is_best)
+                directory=args.outdir,
+                is_best=False,
+                filename=f'checkpoint_{epoch}.pth')
 
     if args.export:
         if args.gpu == 0:
@@ -262,7 +266,7 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
             validate(epoch)
         elapsed = time.time() - tic
         if args.gpu == 0:
-            print(f'Epoch: {epoch}, Time cost: {elapsed}')
+            logger.info(f'Epoch: {epoch}, Time cost: {elapsed}')
 
     if args.gpu == 0:
         save_checkpoint({
@@ -273,9 +277,9 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
                 'acclist_train':acclist_train,
                 'acclist_val':acclist_val,
             },
-            args=args,
-            cfg=cfg,
-            is_best=False)
+            directory=args.outdir,
+            is_best=False,
+            filename='model_final.pth')
 
 if __name__ == "__main__":
     main()
