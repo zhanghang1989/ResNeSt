@@ -167,7 +167,7 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
     if args.resume is not None:
         if os.path.isfile(args.resume):
             if args.gpu == 0:
-                logger.info("=> loading checkpoint '{args.resume}'")
+                logger.info(f"=> loading checkpoint '{args.resume}'")
             checkpoint = torch.load(args.resume)
             cfg.TRAINING.START_EPOCHS = checkpoint['epoch'] + 1 if cfg.TRAINING.START_EPOCHS == 0 \
                     else cfg.TRAINING.START_EPOCHS
