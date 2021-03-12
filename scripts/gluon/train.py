@@ -42,7 +42,7 @@ from mxnet.gluon.data.vision import transforms
 
 from resnest.gluon import get_model
 from resnest.utils import mkdir
-from resnest.transforms import ERandomCrop, ECenterCrop
+from resnest.gluon.transforms import ERandomCrop, ECenterCrop
 from torchvision.transforms import transforms as pth_transforms
 
 try:

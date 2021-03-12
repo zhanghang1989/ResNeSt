@@ -11,8 +11,24 @@ import torch
 import torch.nn as nn
 
 from .splat import SplAtConv2d
+from .build import RESNEST_MODELS_REGISTRY
 
 __all__ = ['ResNet', 'Bottleneck']
+
+_url_format = 'https://s3.us-west-1.wasabisys.com/resnest/torch/{}-{}.pth'
+
+_model_sha256 = {name: checksum for checksum, name in [
+    ]}
+
+
+def short_hash(name):
+    if name not in _model_sha256:
+        raise ValueError('Pretrained model for {name} is not available.'.format(name=name))
+    return _model_sha256[name][:8]
+
+resnest_model_urls = {name: _url_format.format(name, short_hash(name)) for
+    name in _model_sha256.keys()
+}
 
 class DropBlock2D(object):
     def __init__(self, *args, **kwargs):
@@ -296,10 +312,47 @@ class ResNet(nn.Module):
         x = self.layer4(x)
 
         x = self.avgpool(x)
-        #x = x.view(x.size(0), -1)
         x = torch.flatten(x, 1)
         if self.drop:
             x = self.drop(x)
         x = self.fc(x)
 
         return x
+
+@RESNEST_MODELS_REGISTRY.register()
+def resnet50(pretrained=False, root='~/.encoding/models', **kwargs):
+    """Constructs a ResNet-50 model.
+    Args:
+        pretrained (bool): If True, returns a model pre-trained on ImageNet
+    """
+    model = ResNet(Bottleneck, [3, 4, 6, 3], **kwargs)
+    if pretrained:
+        model.load_state_dict(torch.hub.load_state_dict_from_url(
+            resnest_model_urls['resnet50'], progress=True, check_hash=True))
+    return model
+
+
+@RESNEST_MODELS_REGISTRY.register()
+def resnet101(pretrained=False, root='~/.encoding/models', **kwargs):
+    """Constructs a ResNet-101 model.
+    Args:
+        pretrained (bool): If True, returns a model pre-trained on ImageNet
+    """
+    model = ResNet(Bottleneck, [3, 4, 23, 3], **kwargs)
+    if pretrained:
+        model.load_state_dict(torch.hub.load_state_dict_from_url(
+            resnest_model_urls['resnet101'], progress=True, check_hash=True))
+    return model
+
+
+@RESNEST_MODELS_REGISTRY.register()
+def resnet152(pretrained=False, root='~/.encoding/models', **kwargs):
+    """Constructs a ResNet-152 model.
+    Args:
+        pretrained (bool): If True, returns a model pre-trained on ImageNet
+    """
+    model = ResNet(Bottleneck, [3, 8, 36, 3], **kwargs)
+    if pretrained:
+        model.load_state_dict(torch.hub.load_state_dict_from_url(
+            resnest_model_urls['resnet152'], progress=True, check_hash=True))
+    return model
