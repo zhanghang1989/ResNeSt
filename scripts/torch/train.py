@@ -25,7 +25,7 @@ from resnest.torch.loss import get_criterion
 from resnest.torch.utils import (save_checkpoint, accuracy,
         AverageMeter, LR_Scheduler, torch_dist_sum)
 
-logger = logging.getLogger('train')
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 class Options():
