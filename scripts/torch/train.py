@@ -8,6 +8,7 @@
 
 import os
 import time
+import json
 import logging
 import argparse
 
@@ -239,12 +240,13 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
         # sum all
         sum1, cnt1, sum5, cnt5 = torch_dist_sum(args.gpu, top1.sum, top1.count, top5.sum, top5.count)
 
+        top1_acc, top5_acc = 0, 0
         if args.gpu == 0:
             top1_acc = sum(sum1) / sum(cnt1)
             top5_acc = sum(sum5) / sum(cnt5)
             logger.info('Validation: Top1: %.3f | Top5: %.3f'%(top1_acc, top5_acc))
             if args.eval_only:
-                return
+                return top1_acc, top5_acc
 
             # save checkpoint
             acclist_val += [top1_acc]
@@ -262,26 +264,36 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
                 directory=args.outdir,
                 is_best=False,
                 filename=f'checkpoint_{epoch}.pth')
+        return top1_acc, top5_acc
 
     if args.export:
         if args.gpu == 0:
-            torch.save(model.module.state_dict(), args.export + '.pth')
+            with PathManager.open(args.export + '.pth', "wb") as f:
+                torch.save(model.module.state_dict(), f)
         return
 
     if args.eval_only:
-        validate(cfg.TRAINING.START_EPOCHS)
+        top1_acc, top5_acc = validate(cfg.TRAINING.START_EPOCHS)
+        metrics = {
+            "top1": top1_acc,
+            "top5": top5_acc,
+        }
+        if args.gpu == 0:
+            with PathManager.open(os.path.join(args.outdir, 'metrics.json'), "w") as f:
+                json.dump(metrics, f)
         return
 
     for epoch in range(cfg.TRAINING.START_EPOCHS, cfg.TRAINING.EPOCHS):
         tic = time.time()
         train(epoch)
-        if epoch % 10 == 0 or epoch == cfg.TRAINING.EPOCHS - 1:
-            validate(epoch)
+        if epoch % 10 == 0:
+            top1_acc, top5_acc = validate(epoch)
         elapsed = time.time() - tic
         if args.gpu == 0:
             logger.info(f'Epoch: {epoch}, Time cost: {elapsed}')
 
     if args.gpu == 0:
+        top1_acc, top5_acc = validate(cfg.TRAINING.START_EPOCHS - 1)
         save_checkpoint({
                 'epoch': cfg.TRAINING.EPOCHS - 1,
                 'state_dict': model.module.state_dict(),
@@ -292,7 +304,18 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
             },
             directory=args.outdir,
             is_best=False,
-            filename='model_final.pth')
+            filename='checkpoint_final.pth')
+
+        with PathManager.open(os.path.join(args.outdir, 'model_weights.pth'), "wb") as f:
+            torch.save(model.module.state_dict(), f)
+
+        metrics = {
+            "top1": top1_acc,
+            "top5": top5_acc,
+        }
+        if args.gpu == 0:
+            with PathManager.open(os.path.join(args.outdir, 'metrics.json'), "w") as f:
+                json.dump(metrics, f)
 
 if __name__ == "__main__":
     main()
