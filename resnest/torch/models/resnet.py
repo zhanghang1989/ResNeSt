@@ -10,7 +10,7 @@ import math
 import torch
 import torch.nn as nn
 
-from .splat import SplAtConv2d
+from .splat import SplAtConv2d, DropBlock2D
 from .build import RESNEST_MODELS_REGISTRY
 
 __all__ = ['ResNet', 'Bottleneck']
@@ -29,10 +29,6 @@ def short_hash(name):
 resnest_model_urls = {name: _url_format.format(name, short_hash(name)) for
     name in _model_sha256.keys()
 }
-
-class DropBlock2D(object):
-    def __init__(self, *args, **kwargs):
-        raise NotImplementedError
 
 class GlobalAvgPool2d(nn.Module):
     def __init__(self):

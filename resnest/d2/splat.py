@@ -13,6 +13,10 @@ from detectron2.layers import (
 
 __all__ = ['SplAtConv2d', 'SplAtConv2d_dcn']
 
+class DropBlock2D(object):
+    def __init__(self, *args, **kwargs):
+        raise NotImplementedError
+
 class SplAtConv2d(Module):
     """Split-Attention Conv2d
     """

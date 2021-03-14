@@ -16,14 +16,15 @@ import torch.distributed as dist
 import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel
 
-from resnest.utils import mkdir
 from resnest.torch.config import get_cfg
 from resnest.torch.models.build import get_model
 from resnest.torch.datasets import get_dataset
 from resnest.torch.transforms import get_transform
 from resnest.torch.loss import get_criterion
 from resnest.torch.utils import (save_checkpoint, accuracy,
-        AverageMeter, LR_Scheduler, torch_dist_sum)
+        AverageMeter, LR_Scheduler, torch_dist_sum, mkdir,
+        cached_log_stream)
+from fvcore.common.file_io import PathManager
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -87,9 +88,14 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
     torch.cuda.set_device(args.gpu)
     if args.gpu == 0:
         mkdir(args.outdir)
-        fh = logging.FileHandler(os.path.join(args.outdir, 'log.txt'))
+        filename = os.path.join(args.outdir, 'log.txt')
+        fh = logging.StreamHandler(cached_log_stream(filename))
         fh.setLevel(logging.INFO)
         logger.addHandler(fh)
+        plain_formatter = logging.Formatter(
+            "[%(asctime)s] %(name)s %(levelname)s: %(message)s", datefmt="%m/%d %H:%M:%S"
+        )
+        fh.setFormatter(plain_formatter)
         logger.info(args)
 
     # init the global
@@ -168,7 +174,8 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
         if os.path.isfile(args.resume):
             if args.gpu == 0:
                 logger.info(f"=> loading checkpoint '{args.resume}'")
-            checkpoint = torch.load(args.resume)
+            with PathManager.open(args.resume, "rb") as f:
+                checkpoint = torch.load(f)
             cfg.TRAINING.START_EPOCHS = checkpoint['epoch'] + 1 if cfg.TRAINING.START_EPOCHS == 0 \
                     else cfg.TRAINING.START_EPOCHS
             best_pred = checkpoint['best_pred']
