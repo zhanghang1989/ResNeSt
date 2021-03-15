@@ -8,6 +8,7 @@
 
 import os
 import time
+import json
 import logging
 import argparse
 
@@ -16,16 +17,16 @@ import torch.distributed as dist
 import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel
 
-from resnest.utils import mkdir
 from resnest.torch.config import get_cfg
 from resnest.torch.models.build import get_model
 from resnest.torch.datasets import get_dataset
 from resnest.torch.transforms import get_transform
 from resnest.torch.loss import get_criterion
 from resnest.torch.utils import (save_checkpoint, accuracy,
-        AverageMeter, LR_Scheduler, torch_dist_sum)
+        AverageMeter, LR_Scheduler, torch_dist_sum, mkdir,
+        cached_log_stream, PathManager)
 
-logger = logging.getLogger('train')
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 class Options():
@@ -87,9 +88,14 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
     torch.cuda.set_device(args.gpu)
     if args.gpu == 0:
         mkdir(args.outdir)
-        fh = logging.FileHandler(os.path.join(args.outdir, 'log.txt'))
+        filename = os.path.join(args.outdir, 'log.txt')
+        fh = logging.StreamHandler(cached_log_stream(filename))
         fh.setLevel(logging.INFO)
         logger.addHandler(fh)
+        plain_formatter = logging.Formatter(
+            "[%(asctime)s] %(name)s %(levelname)s: %(message)s", datefmt="%m/%d %H:%M:%S"
+        )
+        fh.setFormatter(plain_formatter)
         logger.info(args)
 
     # init the global
@@ -168,7 +174,8 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
         if os.path.isfile(args.resume):
             if args.gpu == 0:
                 logger.info(f"=> loading checkpoint '{args.resume}'")
-            checkpoint = torch.load(args.resume)
+            with PathManager.open(args.resume, "rb") as f:
+                checkpoint = torch.load(f)
             cfg.TRAINING.START_EPOCHS = checkpoint['epoch'] + 1 if cfg.TRAINING.START_EPOCHS == 0 \
                     else cfg.TRAINING.START_EPOCHS
             best_pred = checkpoint['best_pred']
@@ -231,13 +238,13 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
 
         # sum all
         sum1, cnt1, sum5, cnt5 = torch_dist_sum(args.gpu, top1.sum, top1.count, top5.sum, top5.count)
+        top1_acc = sum(sum1) / sum(cnt1)
+        top5_acc = sum(sum5) / sum(cnt5)
 
         if args.gpu == 0:
-            top1_acc = sum(sum1) / sum(cnt1)
-            top5_acc = sum(sum5) / sum(cnt5)
             logger.info('Validation: Top1: %.3f | Top5: %.3f'%(top1_acc, top5_acc))
             if args.eval_only:
-                return
+                return top1_acc, top5_acc
 
             # save checkpoint
             acclist_val += [top1_acc]
@@ -255,26 +262,38 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
                 directory=args.outdir,
                 is_best=False,
                 filename=f'checkpoint_{epoch}.pth')
+        return top1_acc.item(), top5_acc.item()
 
     if args.export:
         if args.gpu == 0:
-            torch.save(model.module.state_dict(), args.export + '.pth')
+            with PathManager.open(args.export + '.pth', "wb") as f:
+                torch.save(model.module.state_dict(), f)
         return
 
     if args.eval_only:
-        validate(cfg.TRAINING.START_EPOCHS)
+        top1_acc, top5_acc = validate(cfg.TRAINING.START_EPOCHS)
+        metrics = {
+            "top1": top1_acc,
+            "top5": top5_acc,
+        }
+        if args.gpu == 0:
+            with PathManager.open(os.path.join(args.outdir, 'metrics.json'), "w") as f:
+                json.dump(metrics, f)
         return
 
     for epoch in range(cfg.TRAINING.START_EPOCHS, cfg.TRAINING.EPOCHS):
         tic = time.time()
         train(epoch)
-        if epoch % 10 == 0 or epoch == cfg.TRAINING.EPOCHS - 1:
-            validate(epoch)
+        if epoch % 10 == 0:
+            top1_acc, top5_acc = validate(epoch)
         elapsed = time.time() - tic
         if args.gpu == 0:
             logger.info(f'Epoch: {epoch}, Time cost: {elapsed}')
 
+    # final evaluation
+    top1_acc, top5_acc = validate(cfg.TRAINING.START_EPOCHS - 1)
     if args.gpu == 0:
+        # save final checkpoint
         save_checkpoint({
                 'epoch': cfg.TRAINING.EPOCHS - 1,
                 'state_dict': model.module.state_dict(),
@@ -285,7 +304,18 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
             },
             directory=args.outdir,
             is_best=False,
-            filename='model_final.pth')
+            filename='checkpoint_final.pth')
+
+        # save final model weights
+        with PathManager.open(os.path.join(args.outdir, 'model_weights.pth'), "wb") as f:
+            torch.save(model.module.state_dict(), f)
+
+        metrics = {
+            "top1": top1_acc,
+            "top5": top5_acc,
+        }
+        with PathManager.open(os.path.join(args.outdir, 'metrics.json'), "w") as f:
+            json.dump(metrics, f)
 
 if __name__ == "__main__":
     main()

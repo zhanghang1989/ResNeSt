@@ -10,15 +10,20 @@
 
 import os
 import math
+import atexit
 import shutil
 import functools
 import threading
 import numpy as np
 import torch
-from ..utils import mkdir
 
-__all__ = ['accuracy', 'AverageMeter', 'LR_Scheduler',
-           'torch_dist_sum', 'MixUpWrapper', 'save_checkpoint']
+from iopath.common.file_io import PathManager as PathManagerBase
+
+__all__ = ['accuracy', 'AverageMeter', 'LR_Scheduler', 'mkdir',
+           'torch_dist_sum', 'MixUpWrapper', 'save_checkpoint',
+           'cached_log_stream', 'PathManager']
+
+PathManager = PathManagerBase()
 
 def accuracy(output, target, topk=(1,)):
     """Computes the accuracy over the k top predictions for the specified values of k"""
@@ -198,7 +203,23 @@ def save_checkpoint(state, directory, is_best, filename='checkpoint.pth'):
     """Saves checkpoint to disk"""
     mkdir(directory)
     filename = os.path.join(directory, filename)
-    torch.save(state, filename)
+    with PathManager.open(filename, "wb") as f:
+        torch.save(state, f)
+    best_filename = os.path.join(directory, 'model_best.pth')
     if is_best:
-        shutil.copyfile(filename, os.path.join(directory, 'model_best.pth'))
+        with PathManager.open(best_filename, "wb") as f:
+            torch.save(state, f)
 
+# cache the opened file object, so that different calls to `setup_logger`
+# with the same file name can safely write to the same file.
+@functools.lru_cache(maxsize=None)
+def cached_log_stream(filename):
+    # use 1K buffer if writing to cloud storage
+    io = PathManager.open(filename, "a", buffering=1024 if "://" in filename else -1)
+    atexit.register(io.close)
+    return io
+
+def mkdir(path):
+    """Make directory at the specified local path with special error handling.
+    """
+    PathManager.mkdirs(path)

@@ -1,5 +1,13 @@
 import os
-from fvcore.common.config import CfgNode as CN
+from fvcore.common.config import CfgNode as _CfgNode
+from .utils import PathManager
+
+class CN(_CfgNode):
+    @classmethod
+    def _open_cfg(cls, filename):
+        return PathManager.open(filename, "r")
+
+CfgNode = CN
 
 _C = CN()
 

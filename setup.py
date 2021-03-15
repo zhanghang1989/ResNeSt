@@ -40,6 +40,7 @@ requirements = [
     'Pillow',
     'scipy',
     'requests',
+    'iopath',
     'fvcore',
 ]
 
