@@ -1,6 +1,6 @@
 import os
 from fvcore.common.config import CfgNode as _CfgNode
-from fvcore.common.file_io import PathManager
+from .utils import PathManager
 
 class CN(_CfgNode):
     @classmethod

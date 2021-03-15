@@ -24,8 +24,7 @@ from resnest.torch.transforms import get_transform
 from resnest.torch.loss import get_criterion
 from resnest.torch.utils import (save_checkpoint, accuracy,
         AverageMeter, LR_Scheduler, torch_dist_sum, mkdir,
-        cached_log_stream)
-from fvcore.common.file_io import PathManager
+        cached_log_stream, PathManager)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -239,11 +238,10 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
 
         # sum all
         sum1, cnt1, sum5, cnt5 = torch_dist_sum(args.gpu, top1.sum, top1.count, top5.sum, top5.count)
+        top1_acc = sum(sum1) / sum(cnt1)
+        top5_acc = sum(sum5) / sum(cnt5)
 
-        top1_acc, top5_acc = 0, 0
         if args.gpu == 0:
-            top1_acc = sum(sum1) / sum(cnt1)
-            top5_acc = sum(sum5) / sum(cnt5)
             logger.info('Validation: Top1: %.3f | Top5: %.3f'%(top1_acc, top5_acc))
             if args.eval_only:
                 return top1_acc, top5_acc
@@ -264,7 +262,7 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
                 directory=args.outdir,
                 is_best=False,
                 filename=f'checkpoint_{epoch}.pth')
-        return top1_acc, top5_acc
+        return top1_acc.item(), top5_acc.item()
 
     if args.export:
         if args.gpu == 0:
@@ -292,8 +290,10 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
         if args.gpu == 0:
             logger.info(f'Epoch: {epoch}, Time cost: {elapsed}')
 
+    # final evaluation
+    top1_acc, top5_acc = validate(cfg.TRAINING.START_EPOCHS - 1)
     if args.gpu == 0:
-        top1_acc, top5_acc = validate(cfg.TRAINING.START_EPOCHS - 1)
+        # save final checkpoint
         save_checkpoint({
                 'epoch': cfg.TRAINING.EPOCHS - 1,
                 'state_dict': model.module.state_dict(),
@@ -306,6 +306,7 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
             is_best=False,
             filename='checkpoint_final.pth')
 
+        # save final model weights
         with PathManager.open(os.path.join(args.outdir, 'model_weights.pth'), "wb") as f:
             torch.save(model.module.state_dict(), f)
 
@@ -313,9 +314,8 @@ def main_worker(gpu, ngpus_per_node, args, cfg):
             "top1": top1_acc,
             "top5": top5_acc,
         }
-        if args.gpu == 0:
-            with PathManager.open(os.path.join(args.outdir, 'metrics.json'), "w") as f:
-                json.dump(metrics, f)
+        with PathManager.open(os.path.join(args.outdir, 'metrics.json'), "w") as f:
+            json.dump(metrics, f)
 
 if __name__ == "__main__":
     main()

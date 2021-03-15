@@ -16,12 +16,14 @@ import functools
 import threading
 import numpy as np
 import torch
-from ..utils import mkdir
-from fvcore.common.file_io import PathManager
+
+from iopath.common.file_io import PathManager as PathManagerBase
 
 __all__ = ['accuracy', 'AverageMeter', 'LR_Scheduler', 'mkdir',
            'torch_dist_sum', 'MixUpWrapper', 'save_checkpoint',
-           'cached_log_stream']
+           'cached_log_stream', 'PathManager']
+
+PathManager = PathManagerBase()
 
 def accuracy(output, target, topk=(1,)):
     """Computes the accuracy over the k top predictions for the specified values of k"""
