@@ -48,7 +48,7 @@ pip install resnest --pre
 | ResNeSt-200 | 320       | 83.84   | 83.88 |
 | ResNeSt-269 | 416       | 84.54   | 84.53 |
 
-- **3rd party implementations** are available: [Tensorflow](https://github.com/QiaoranC/tf_ResNeSt_RegNet_model), [Caffe](https://github.com/NetEase-GameAI/ResNeSt-caffe).
+- **3rd party implementations** are available: [Tensorflow](https://github.com/QiaoranC/tf_ResNeSt_RegNet_model), [Caffe](https://github.com/NetEase-GameAI/ResNeSt-caffe), [JAX](https://github.com/n2cholas/jax-resnet/).
 
 - Extra ablation study models are available in [link](./ablation.md)
 
