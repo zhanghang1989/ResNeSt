@@ -63,7 +63,7 @@ class Bottleneck(nn.Module):
 
         if dropblock_prob > 0.0:
             self.dropblock1 = DropBlock2D(dropblock_prob, 3)
-            if radix == 1:
+            if radix == 0:
                 self.dropblock2 = DropBlock2D(dropblock_prob, 3)
             self.dropblock3 = DropBlock2D(dropblock_prob, 3)
 
