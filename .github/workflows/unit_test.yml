@@ -15,13 +15,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: seanmiddleditch/gha-setup-ninja@master
+      - uses: actions/checkout@v4
+      - uses: seanmiddleditch/gha-setup-ninja@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.7
+          python-version: '3.10'
 
       - name: Install package
         run: |
@@ -30,7 +30,7 @@ jobs:
           pip install pytest torch mxnet
           pip install nose
           pip install -e .
-            
+
       - name: Run pytest
         run: |
           for f in tests/*.py; do python "$f"; done
