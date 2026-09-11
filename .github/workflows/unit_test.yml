@@ -28,9 +28,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install numpy -I
           pip install pytest torch
-          pip install nose
           pip install -e .
 
       - name: Run pytest
         run: |
-          for f in tests/test_torch.py tests/test_radix_major.py; do python "$f"; done
+          pytest tests/test_torch.py tests/test_radix_major.py
